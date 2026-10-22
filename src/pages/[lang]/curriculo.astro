@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+import { campo, perfil, caminhosIdioma } from '../../lib/util';
+
+export const getStaticPaths = caminhosIdioma;
+const lang = Astro.params.lang as Lang;
+const p = perfil();
+const formacao = p.formacao || [];
+const experiencias = p.experiencias || [];
+const publicacoes = p.publicacoes || [];
+const premios = p.premios || [];
+---
+<Base lang={lang} titulo={t(lang, 'cv.titulo')}>
+  <div class="wrap">
+    <header class="cabecalho-pagina">
+      <h1>{t(lang, 'cv.titulo')}</h1>
+      <p class="lede">{campo(p, 'titulo', lang)}</p>
+      {p.lattes && <a class="botao" href={p.lattes} target="_blank" rel="noopener">{t(lang, 'cv.lattes')}</a>}
+    </header>
+
+    {formacao.length > 0 && (
+      <section class="bloco">
+        <h2>{t(lang, 'cv.formacao')}</h2>
+        <ol class="linha-tempo">
+          {formacao.map((f: any) => (
+            <li>
+              <span class="quando">{f.inicio}{f.fim && ` – ${f.fim}`}</span>
+              <h3>{f.curso}</h3>
+              <p class="onde">{f.instituicao}</p>
+              {f.descricao && <p>{f.descricao}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {experiencias.length > 0 && (
+      <section class="bloco">
+        <h2>{t(lang, 'cv.experiencias')}</h2>
+        <ol class="linha-tempo">
+          {experiencias.map((e: any) => (
+            <li>
+              {e.periodo && <span class="quando">{e.periodo}</span>}
+              <h3>{e.titulo}</h3>
+              {e.local && <p class="onde">{e.local}</p>}
+              {e.descricao && <p>{e.descricao}</p>}
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {publicacoes.length > 0 && (
+      <section class="bloco">
+        <h2>{t(lang, 'cv.publicacoes')}</h2>
+        <ul class="simples">
+          {publicacoes.map((pub: any) => (
+            <li>
+              {pub.ano && <span class="ano">{pub.ano}</span>}
+              <span>{pub.link ? <a href={pub.link} target="_blank" rel="noopener">{pub.referencia}</a> : pub.referencia}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    {premios.length > 0 && (
+      <section class="bloco">
+        <h2>{t(lang, 'cv.premios')}</h2>
+        <ul class="simples">
+          {premios.map((pr: any) => (
+            <li>
+              {pr.ano && <span class="ano">{pr.ano}</span>}
+              <span>{pr.titulo}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </div>
+</Base>
+
+<style>
+  .cabecalho-pagina .botao { margin-top: 12px; }
+  .bloco { margin-top: 56px; max-width: 760px; }
+  .bloco h2 { margin-bottom: 24px; }
+  .linha-tempo { list-style: none; padding: 0; margin: 0; }
+  .linha-tempo li {
+    position: relative;
+    padding: 0 0 32px 36px;
+  }
+  .linha-tempo li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+  .linha-tempo li::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 28px;
+    bottom: 4px;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--line);
+  }
+  .linha-tempo li:last-child::after { display: none; }
+  .quando { font-size: 0.88rem; font-weight: 700; color: var(--orange-ink); }
+  .linha-tempo h3 { margin: 4px 0 2px; }
+  .onde { color: var(--muted); margin-bottom: 6px; }
+  .linha-tempo p { margin-bottom: 4px; }
+
+  .simples { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .simples li {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    padding: 16px 22px;
+    background: var(--surface);
+    border-radius: var(--r-md);
+  }
+  .ano { font-weight: 700; color: var(--orange-ink); flex: none; }
+</style>

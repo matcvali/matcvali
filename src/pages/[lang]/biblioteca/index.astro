@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Capa from '../../../components/Capa.astro';
+import { t, type Lang } from '../../../i18n/ui';
+import { url, caminhosIdioma } from '../../../lib/util';
+
+export const getStaticPaths = caminhosIdioma;
+const lang = Astro.params.lang as Lang;
+
+const ordemStatus = { lendo: 0, lido: 1, consulta: 2, 'quero-ler': 3 } as const;
+const livros = (await getCollection('livros')).sort(
+  (a, b) =>
+    ordemStatus[a.data.status] - ordemStatus[b.data.status] ||
+    a.data.titulo.localeCompare(b.data.titulo),
+);
+
+const filtros = [
+  { id: 'todos', rotulo: t(lang, 'bib.todos') },
+  { id: 'lendo', rotulo: t(lang, 'bib.lendo') },
+  { id: 'lido', rotulo: t(lang, 'bib.lido') },
+  { id: 'consulta', rotulo: t(lang, 'bib.consulta') },
+  { id: 'quero-ler', rotulo: t(lang, 'bib.quero-ler') },
+].map((f) => ({
+  ...f,
+  qtd: f.id === 'todos' ? livros.length : livros.filter((l) => l.data.status === f.id).length,
+}));
+---
+<Base lang={lang} titulo={t(lang, 'bib.titulo')} descricao={t(lang, 'bib.intro')}>
+  <div class="wrap">
+    <header class="cabecalho-pagina">
+      <h1>{t(lang, 'bib.titulo')}</h1>
+      <p class="lede">{t(lang, 'bib.intro')}</p>
+    </header>
+
+    <div class="filtros" role="group">
+      {filtros.map((f, i) => (
+        <button type="button" data-filtro={f.id} aria-pressed={i === 0 ? 'true' : 'false'} disabled={f.qtd === 0}>
+          {f.rotulo} <span>{f.qtd}</span>
+        </button>
+      ))}
+    </div>
+
+    <ul class="estante">
+      {livros.map((l) => (
+        <li data-status={l.data.status}>
+          <a href={url(`/${lang}/biblioteca/${l.id}/`)}>
+            <Capa titulo={l.data.titulo} autor={l.data.autor} capa={l.data.capa} />
+            <span class="livro-titulo">{l.data.titulo}</span>
+            <span class="livro-autor">{l.data.autor}</span>
+            {l.data.status === 'lendo' && <span class="pill lendo">{t(lang, 'bib.status.lendo')}</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="vazio" hidden>{t(lang, 'bib.vazio')}</p>
+  </div>
+</Base>
+
+<script>
+  const botoes = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+  const itens = document.querySelectorAll<HTMLLIElement>('.estante li');
+  const vazio = document.querySelector<HTMLElement>('.vazio');
+  botoes.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filtro;
+      botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let visiveis = 0;
+      itens.forEach((li) => {
+        const mostrar = f === 'todos' || li.dataset.status === f;
+        li.hidden = !mostrar;
+        if (mostrar) visiveis++;
+      });
+      if (vazio) vazio.hidden = visiveis > 0;
+    }),
+  );
+</script>
+
+<style>
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+  .filtros button {
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 0;
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .filtros button span { color: var(--muted); font-weight: 500; margin-left: 2px; }
+  .filtros button[aria-pressed='true'] { background: var(--ink); color: var(--bg); }
+  .filtros button[aria-pressed='true'] span { color: var(--apricot); }
+  .filtros button:disabled { opacity: 0.4; cursor: default; }
+
+  .estante {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 36px 24px;
+  }
+  .estante a { display: flex; flex-direction: column; gap: 6px; color: var(--ink); text-decoration: none; }
+  .estante a :global(.capa) { transition: transform 0.3s cubic-bezier(.3,1.6,.6,1); margin-bottom: 8px; }
+  .estante a:hover :global(.capa) { transform: translateY(-6px) rotate(-1.5deg); }
+  .livro-titulo { font-weight: 700; line-height: 1.3; }
+  .livro-autor { color: var(--muted); font-size: 0.92rem; }
+  .lendo { align-self: flex-start; background: var(--accent); color: var(--on-accent); margin-top: 4px; font-size: 0.75rem; }
+  .vazio { color: var(--muted); }
+</style>

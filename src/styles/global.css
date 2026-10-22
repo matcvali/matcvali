@@ -1,0 +1,198 @@
+/* ============================================================
+   Cores e medidas do site. Para mudar a paleta, mexa só aqui.
+   ============================================================ */
+:root {
+  --bg: #fffbf7;
+  --surface: #fff1e6;
+  --surface-2: #ffe3cf;
+  --ink: #2d1b26;          /* berinjela escuro, harmoniza com o laranja */
+  --muted: #7a6270;
+  --line: #f1d6c4;
+  --orange: #f06a1f;       /* laranja principal */
+  --orange-ink: #b84a0d;   /* laranja para texto, com contraste */
+  --apricot: #ffc39b;
+  --amber: #f5a83a;
+  --plum: #7b3f63;
+  --accent: #c2500f;       /* fundo de botões e selos */
+  --on-accent: #ffffff;
+
+  --r-sm: 14px;
+  --r-md: 22px;
+  --r-lg: 34px;
+  --r-pill: 999px;
+
+  --font-display: 'Fraunces Variable', Georgia, serif;
+  --font-body: 'Figtree Variable', system-ui, sans-serif;
+
+  --max: 1080px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #1d1219;
+    --surface: #2a1b24;
+    --surface-2: #3a2532;
+    --ink: #fbeee6;
+    --muted: #c3a9b5;
+    --line: #47303d;
+    --orange: #ff8540;
+    --orange-ink: #ffa36b;
+    --apricot: #8a4a2c;
+    --amber: #f7b555;
+    --plum: #d79bbd;
+    --accent: #ff8540;
+    --on-accent: #2d1b26;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --bg: #1d1219;
+  --surface: #2a1b24;
+  --surface-2: #3a2532;
+  --ink: #fbeee6;
+  --muted: #c3a9b5;
+  --line: #47303d;
+  --orange: #ff8540;
+  --orange-ink: #ffa36b;
+  --apricot: #8a4a2c;
+  --amber: #f7b555;
+  --plum: #d79bbd;
+  --accent: #ff8540;
+  --on-accent: #2d1b26;
+  color-scheme: dark;
+}
+
+/* ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--orange-ink); text-underline-offset: 0.2em; text-decoration-thickness: 1.5px; }
+a:hover { color: var(--orange); }
+
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-variation-settings: 'SOFT' 100, 'WONK' 0;
+  font-weight: 560;
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+}
+h1 { font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 600; }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); }
+h3 { font-size: 1.3rem; }
+
+p { margin: 0 0 1em; }
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.lede {
+  font-size: 1.2rem;
+  color: var(--muted);
+  max-width: 58ch;
+}
+
+.prose { max-width: 66ch; }
+.prose p, .prose li { font-size: 1.08rem; }
+.prose h2 { margin-top: 1.6em; font-size: 1.6rem; }
+.prose h3 { margin-top: 1.4em; }
+.prose blockquote {
+  margin: 1.4em 0;
+  padding: 1em 1.4em;
+  background: var(--surface);
+  border-radius: var(--r-md);
+  border-left: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-style: italic;
+}
+.prose img { border-radius: var(--r-md); }
+.prose code {
+  background: var(--surface);
+  padding: 0.1em 0.4em;
+  border-radius: 6px;
+  font-size: 0.92em;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.3em 0.85em;
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.aviso {
+  font-size: 0.9rem;
+  color: var(--muted);
+  background: var(--surface);
+  padding: 0.6em 1em;
+  border-radius: var(--r-sm);
+  display: inline-block;
+}
+
+.cabecalho-pagina {
+  padding-block: clamp(40px, 8vw, 88px) 32px;
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.75em 1.4em;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+.botao:hover { color: var(--on-accent); background: var(--orange); transform: translateY(-1px); }
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 24px;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

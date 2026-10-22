@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { t, type Lang } from '../../../i18n/ui';
+import { url, campo, caminhosIdioma } from '../../../lib/util';
+
+export const getStaticPaths = caminhosIdioma;
+const lang = Astro.params.lang as Lang;
+const interesses = (await getCollection('interesses')).sort((a, b) => a.data.ordem - b.data.ordem);
+const formas = [
+  '62% 38% 54% 46% / 48% 58% 42% 52%',
+  '42% 58% 40% 60% / 58% 42% 58% 42%',
+  '54% 46% 62% 38% / 40% 52% 48% 60%',
+];
+---
+<Base lang={lang} titulo={t(lang, 'int.titulo')} descricao={t(lang, 'int.intro')}>
+  <div class="wrap">
+    <header class="cabecalho-pagina">
+      <h1>{t(lang, 'int.titulo')}</h1>
+      <p class="lede">{t(lang, 'int.intro')}</p>
+    </header>
+
+    <ul class="lista">
+      {interesses.map((it, i) => (
+        <li>
+          <a href={url(`/${lang}/interesses/${it.id}/`)}>
+            <span class="forma" style={`border-radius:${formas[i % formas.length]}`} aria-hidden="true"></span>
+            <span class="corpo">
+              <span class="nome">{campo(it.data, 'titulo', lang)}</span>
+              <span class="resumo">{campo(it.data, 'resumo', lang)}</span>
+            </span>
+            {it.data.desde && <span class="pill">{t(lang, 'int.desde')} {it.data.desde}</span>}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .lista { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .lista a {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background 0.25s;
+  }
+  .lista a:hover { background: var(--surface-2); }
+  .forma { width: 46px; height: 46px; background: var(--orange); transition: transform 0.5s cubic-bezier(.3,1.5,.6,1); }
+  li:nth-child(3n + 2) .forma { background: var(--amber); }
+  li:nth-child(3n) .forma { background: var(--plum); }
+  .lista a:hover .forma { transform: rotate(40deg) scale(1.08); }
+  .corpo { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .nome { font-family: var(--font-display); font-variation-settings: 'SOFT' 100; font-size: 1.6rem; font-weight: 560; line-height: 1.15; }
+  .resumo { color: var(--muted); }
+  .pill { align-self: flex-start; background: var(--bg); }
+</style>

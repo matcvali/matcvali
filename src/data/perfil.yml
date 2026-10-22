@@ -1,0 +1,50 @@
+# Suas informações principais (equivalente ao Lattes).
+# Edite pelo painel (Pages CMS) ou direto aqui.
+
+nome: Seu Nome Completo
+nome_curto: Seu Nome
+titulo: Estudante de graduação e iniciação científica
+titulo_en: Undergraduate student and research fellow
+titulo_es: Estudiante de grado e iniciación científica
+bio: >-
+  Escreva aqui um parágrafo curto sobre quem você é, o que estuda e o que move
+  sua curiosidade. Duas ou três frases bastam.
+bio_en: >-
+  Write a short paragraph about who you are, what you study and what drives
+  your curiosity.
+bio_es: >-
+  Escribe un párrafo corto sobre quién eres, qué estudias y qué mueve tu
+  curiosidad.
+foto: ""
+email: voce@exemplo.com
+lattes: http://lattes.cnpq.br/0000000000000000
+links:
+  - nome: GitHub
+    url: https://github.com/
+  - nome: ORCID
+    url: https://orcid.org/
+
+formacao:
+  - curso: Bacharelado em (seu curso)
+    instituicao: Universidade (nome)
+    inicio: "2023"
+    fim: em andamento
+    descricao: Ênfase em (área). Orientação de Prof. Fulano.
+
+experiencias:
+  - titulo: Iniciação Científica
+    local: Laboratório de (nome), Universidade
+    periodo: 2024 até hoje
+    descricao: Projeto sobre (tema). Bolsa (agência).
+  - titulo: Monitoria de (disciplina)
+    local: Instituto de (nome)
+    periodo: 2024
+
+publicacoes:
+  - referencia: SOBRENOME, N.; ORIENTADOR, F. Título do trabalho. Anais do Congresso X, 2025.
+    ano: "2025"
+    link: ""
+
+premios:
+  - titulo: Menção honrosa no Congresso de Iniciação Científica
+    ano: "2025"
