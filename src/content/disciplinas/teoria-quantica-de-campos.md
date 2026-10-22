@@ -1,6 +1,6 @@
 ---
 titulo: Teoria Quântica de Campos
-etapa: 0
+etapa: 8
 status: planejada
 periodo: "2028.2"
 titulo_en: Quantum Field Theory
