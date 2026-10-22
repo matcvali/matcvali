@@ -1,6 +1,7 @@
 ---
 titulo: Lições de Física 1, 2 e 3
 autor: Feynman
+capa: /imagens/imagem_2025-09-11_161850993-225x300.png
 status: consulta
 nota: 5
 area: Física Geral
