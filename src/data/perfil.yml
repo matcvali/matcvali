@@ -1,50 +1,32 @@
-# Suas informações principais (equivalente ao Lattes).
-# Edite pelo painel (Pages CMS) ou direto aqui.
-
-nome: Seu Nome Completo
-nome_curto: Seu Nome
-titulo: Estudante de graduação e iniciação científica
-titulo_en: Undergraduate student and research fellow
-titulo_es: Estudiante de grado e iniciación científica
-bio: >-
-  Escreva aqui um parágrafo curto sobre quem você é, o que estuda e o que move
-  sua curiosidade. Duas ou três frases bastam.
-bio_en: >-
-  Write a short paragraph about who you are, what you study and what drives
-  your curiosity.
-bio_es: >-
-  Escribe un párrafo corto sobre quién eres, qué estudias y qué mueve tu
-  curiosidad.
-foto: ""
-email: voce@exemplo.com
-lattes: http://lattes.cnpq.br/0000000000000000
-links:
-  - nome: GitHub
-    url: https://github.com/
-  - nome: ORCID
-    url: https://orcid.org/
-
+nome: Mateus Chammas Vali
+nome_curto: Mateus μ
+titulo: Estudante de Física
+titulo_en: Physics Undergraduate Student
+titulo_es: Estudiante de grado en Física
+bio: Meu nome é Mateus e eu gosto de física. Por isso, decidi fazer uma
+  graduação. Simples assim.
+bio_en: My name is Mateus, and I like physics. That's why I decided to pursue an
+  undergraduate degree. Simple as that.
+bio_es: Me llamo Mateus y me gusta la física. Por eso, decidí cursar una carrera
+  universitaria. Así de simple.
+email: mcvali@usp.br
+lattes: http://lattes.cnpq.br/7921524024782122
 formacao:
-  - curso: Bacharelado em (seu curso)
-    instituicao: Universidade (nome)
-    inicio: "2023"
-    fim: em andamento
-    descricao: Ênfase em (área). Orientação de Prof. Fulano.
-
+  - curso: Bacharelado em Física
+    instituicao: Universidade de São Paulo
+    inicio: "2025"
+    fim: Em andamento, previsto para 2028.
+    descricao: Ênfase em QCD, especialmente confinamento de Quarks e Grupos de
+      renormalização. Orientação da Profª. Drª. Ana Julia Sulveira Mizher
 experiencias:
   - titulo: Iniciação Científica
-    local: Laboratório de (nome), Universidade
-    periodo: 2024 até hoje
-    descricao: Projeto sobre (tema). Bolsa (agência).
-  - titulo: Monitoria de (disciplina)
-    local: Instituto de (nome)
-    periodo: 2024
-
-publicacoes:
-  - referencia: SOBRENOME, N.; ORIENTADOR, F. Título do trabalho. Anais do Congresso X, 2025.
-    ano: "2025"
-    link: ""
-
-premios:
-  - titulo: Menção honrosa no Congresso de Iniciação Científica
-    ano: "2025"
+    local: Instituto de Física da Universidade de São Paulo (IFUSP)
+    periodo: 2025-2026
+    descricao: "Estudos para preparar uma base sólida para teoria quântica de
+      campos. Tópicos abordados foram: mecânica quântica, mecânica clássica,
+      relatividade restrita e introdução à física de partículas."
+  - titulo: Iniciação científica
+    local: Instituto de Física da Universidade de São Paulo (IFUSP)
+    periodo: 2026-Atual
+    descricao: Descrições Efetivas de Baixas Energias e Fluxos do Grupo de
+      Renormalização em Mecânica Quântica
