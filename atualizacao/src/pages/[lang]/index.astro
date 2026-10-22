@@ -1,0 +1,178 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { t, type Lang } from '../../i18n/ui';
+import { url, campo, perfil, caminhosIdioma } from '../../lib/util';
+
+export const getStaticPaths = caminhosIdioma;
+const lang = Astro.params.lang as Lang;
+const p = perfil();
+
+const livros = await getCollection('livros');
+const disciplinas = await getCollection('disciplinas');
+const interesses = await getCollection('interesses');
+const documentos = await getCollection('documentos');
+const concluidas = disciplinas.filter((d) => d.data.status === 'concluida').length;
+const totalDisc = disciplinas.filter((d) => d.data.status !== 'sonho').length;
+
+const iniciais = (p.nome || '?')
+  .split(' ')
+  .filter(Boolean)
+  .map((s: string) => s[0])
+  .slice(0, 2)
+  .join('');
+
+const secoes = [
+  { href: `/${lang}/biblioteca/`, nome: t(lang, 'nav.biblioteca'), texto: t(lang, 'inicio.biblioteca'), info: `${livros.length} ${t(lang, 'bib.livros')}` },
+  { href: `/${lang}/caminho/`, nome: t(lang, 'nav.caminho'), texto: t(lang, 'inicio.caminho'), info: `${concluidas}/${totalDisc}` },
+  { href: `/${lang}/interesses/`, nome: t(lang, 'nav.interesses'), texto: t(lang, 'inicio.interesses'), info: String(interesses.length) },
+  { href: `/${lang}/documentos/`, nome: t(lang, 'nav.documentos'), texto: t(lang, 'inicio.documentos'), info: `${documentos.length} PDF` },
+  { href: `/${lang}/curriculo/`, nome: t(lang, 'nav.curriculo'), texto: t(lang, 'inicio.curriculo'), info: 'Lattes' },
+];
+---
+<Base lang={lang} descricao={campo(p, 'bio', lang)}>
+  <section class="hero wrap">
+    <div class="hero-texto">
+      <h1>{p.nome}</h1>
+      <p class="hero-titulo">{campo(p, 'titulo', lang)}</p>
+      <p class="lede">{campo(p, 'bio', lang)}</p>
+      <div class="hero-links">
+        {p.email && <a class="botao" href={`mailto:${p.email}`}>{t(lang, 'geral.contato')}</a>}
+        {p.lattes && <a class="pill" href={p.lattes} target="_blank" rel="noopener">Lattes</a>}
+        {(p.links || []).map((l: any) => (
+          <a class="pill" href={l.url} target="_blank" rel="noopener">{campo(l, 'nome', lang)}</a>
+        ))}
+      </div>
+    </div>
+
+    <div class="hero-arte" aria-hidden={p.foto ? undefined : 'true'}>
+      <div class="blob blob-fundo"></div>
+      <div class:list={["blob", "blob-frente", { "com-foto": p.foto }]}>
+        {p.foto
+          ? <img src={url(p.foto)} alt={p.nome} />
+          : <span class="iniciais">{iniciais}</span>}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap explorar" aria-labelledby="explorar-titulo">
+    <h2 id="explorar-titulo">{t(lang, 'inicio.explore')}</h2>
+    <ul class="secoes">
+      {secoes.map((s) => (
+        <li>
+          <a href={url(s.href)}>
+            <span class="secao-nome">{s.nome}</span>
+            <span class="secao-texto">{s.texto}</span>
+            <span class="secao-info">{s.info}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding-block: clamp(48px, 9vw, 112px) clamp(40px, 7vw, 80px);
+  }
+  .hero h1 {
+    font-size: clamp(2.8rem, 7.5vw, 5.2rem);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    margin-bottom: 0.2em;
+  }
+  .hero-titulo {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100;
+    font-style: italic;
+    font-size: 1.35rem;
+    color: var(--orange-ink);
+    margin-bottom: 1.2em;
+  }
+  .hero-links { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 28px; }
+  .hero-links .pill { text-decoration: none; padding: 0.55em 1.1em; font-size: 0.95rem; }
+  .hero-links .pill:hover { background: var(--surface-2); color: var(--ink); }
+
+  .hero-arte { position: relative; aspect-ratio: 1; max-width: 420px; width: 100%; justify-self: center; }
+  .blob { position: absolute; border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%; }
+  .blob-fundo {
+    inset: 4% -2% -4% 6%;
+    background: var(--apricot);
+    animation: respirar 16s ease-in-out infinite alternate;
+  }
+  .blob-frente {
+    inset: 0 8% 8% 0;
+    background: var(--orange);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    border-radius: 44% 56% 46% 54% / 55% 45% 55% 45%;
+    animation: respirar 16s ease-in-out infinite alternate-reverse;
+  }
+  /* Com foto: sem fundo laranja atrás (evita a borda serrilhada) e a forma é aplicada na própria imagem. */
+  .blob-frente.com-foto { background: transparent; overflow: visible; }
+  .blob-frente img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    backface-visibility: hidden;
+  }
+  .iniciais {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
+    font-size: clamp(5rem, 14vw, 9rem);
+    font-weight: 500;
+    color: var(--bg);
+    letter-spacing: -0.03em;
+  }
+  @keyframes respirar {
+    to { border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; }
+  }
+
+  .explorar h2 { margin-bottom: 24px; }
+  .secoes { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .secoes a {
+    display: grid;
+    grid-template-columns: 200px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 22px 28px;
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background 0.25s, border-radius 0.35s;
+  }
+  .secoes a:hover {
+    background: var(--surface-2);
+    border-radius: 48px 22px 48px 22px;
+  }
+  .secao-nome {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100;
+    font-size: 1.55rem;
+    font-weight: 560;
+  }
+  .secao-texto { color: var(--muted); }
+  .secao-info {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--orange-ink);
+    background: var(--bg);
+    padding: 0.35em 0.9em;
+    border-radius: var(--r-pill);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-arte { order: -1; max-width: 170px; justify-self: start; }
+    .iniciais { font-size: 4rem; }
+    .secoes a { grid-template-columns: 1fr auto; gap: 4px 12px; padding: 18px 22px; }
+    .secao-texto { grid-column: 1 / -1; grid-row: 2; }
+  }
+</style>

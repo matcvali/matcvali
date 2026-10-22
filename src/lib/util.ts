@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import yaml from 'js-yaml';
+import { marked } from 'marked';
 import { langs, type Lang } from '../i18n/ui';
 
 /** Monta um link respeitando o endereço base do site. */
@@ -35,6 +36,30 @@ export function perfil() {
     cachePerfil = yaml.load(fs.readFileSync('./src/data/perfil.yml', 'utf8'));
   }
   return cachePerfil as Record<string, any>;
+}
+
+/** Cor da capa desenhada, sempre a mesma para o mesmo título. */
+const tonsCapa = [
+  ['var(--orange)', '#2d1b26'],
+  ['var(--plum)', 'var(--bg)'],
+  ['var(--apricot)', 'var(--ink)'],
+  ['var(--amber)', '#2d1b26'],
+  ['var(--surface-2)', 'var(--ink)'],
+];
+export function corCapa(titulo: string): [string, string] {
+  let h = 0;
+  for (const c of titulo) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return tonsCapa[h % tonsCapa.length] as [string, string];
+}
+
+/** Texto em minúsculas e sem acentos, para a busca. */
+export function normalizar(texto: string): string {
+  return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/** Converte o texto das traduções (Markdown ou HTML do painel) em HTML. */
+export function markdown(texto: string): string {
+  return marked.parse(texto || '', { async: false }) as string;
 }
 
 /** Converte texto simples (com linhas em branco) em parágrafos HTML seguros. */

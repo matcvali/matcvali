@@ -4,7 +4,7 @@ import '@fontsource-variable/fraunces/full-italic.css';
 import '@fontsource-variable/figtree';
 import '../styles/global.css';
 import { idiomas, langs, t, type Lang } from '../i18n/ui';
-import { url, perfil } from '../lib/util';
+import { url, perfil, campo } from '../lib/util';
 
 interface Props {
   lang: Lang;
@@ -102,10 +102,13 @@ const ano = new Date().getFullYear();
           <ul class="rodape-links">
             {p.lattes && <li><a href={p.lattes} rel="noopener" target="_blank">Lattes</a></li>}
             {(p.links || []).map((l: any) => (
-              <li><a href={l.url} rel="noopener" target="_blank">{l.nome}</a></li>
+              <li><a href={l.url} rel="noopener" target="_blank">{campo(l, 'nome', lang)}</a></li>
             ))}
           </ul>
-          <p class="rodape-ano">© {ano}</p>
+          <p class="rodape-ano">
+            <a href={url(`/${lang}/sobre-o-site/`)}>{t(lang, 'sobre.link')}</a>
+            <span>© {ano}</span>
+          </p>
         </div>
       </div>
     </footer>
@@ -236,5 +239,6 @@ const ano = new Date().getFullYear();
   }
   .rodape-nome { font-family: var(--font-display); font-size: 1.3rem; margin: 0 0 4px; font-variation-settings: 'SOFT' 100; }
   .rodape-links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
-  .rodape-ano { color: var(--muted); margin: 0; }
+  .rodape-ano { color: var(--muted); margin: 0; display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  @media (max-width: 640px) { .rodape-ano { align-items: flex-start; } }
 </style>

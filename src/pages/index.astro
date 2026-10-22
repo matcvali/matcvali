@@ -1,18 +1,335 @@
 ---
-import { url } from '../lib/util';
-const destinos = { pt: url('/pt/'), en: url('/en/'), es: url('/es/') };
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Capa from '../../../components/Capa.astro';
+import { t, type Lang } from '../../../i18n/ui';
+import { url, campo, caminhosIdioma, corCapa, normalizar } from '../../../lib/util';
+
+export const getStaticPaths = caminhosIdioma;
+const lang = Astro.params.lang as Lang;
+
+const ordemStatus = { lendo: 0, lido: 1, consulta: 2, 'quero-ler': 3 } as const;
+const livros = (await getCollection('livros')).sort(
+  (a, b) =>
+    ordemStatus[a.data.status] - ordemStatus[b.data.status] ||
+    campo(a.data, 'titulo', lang).localeCompare(campo(b.data, 'titulo', lang)),
+);
+
+// Agrupa os livros pelo campo "Área" (o tópico). Livros sem área vão para "Sem tópico".
+const SEM = '__sem-topico';
+const mapa = new Map<string, { chave: string; rotulo: string; livros: typeof livros }>();
+for (const l of livros) {
+  const area = (l.data.area || '').trim();
+  const chave = area ? normalizar(area).replace(/[^a-z0-9]+/g, '-') : SEM;
+  if (!mapa.has(chave)) {
+    mapa.set(chave, { chave, rotulo: area ? campo(l.data, 'area', lang) : t(lang, 'bib.outros'), livros: [] });
+  }
+  mapa.get(chave)!.livros.push(l);
+}
+const grupos = [...mapa.values()].sort((a, b) =>
+  a.chave === SEM ? 1 : b.chave === SEM ? -1 : a.rotulo.localeCompare(b.rotulo),
+);
+
+const filtros = [
+  { id: 'todos', rotulo: t(lang, 'bib.todos') },
+  { id: 'lendo', rotulo: t(lang, 'bib.lendo') },
+  { id: 'lido', rotulo: t(lang, 'bib.lido') },
+  { id: 'consulta', rotulo: t(lang, 'bib.consulta') },
+  { id: 'quero-ler', rotulo: t(lang, 'bib.quero-ler') },
+].map((f) => ({
+  ...f,
+  qtd: f.id === 'todos' ? livros.length : livros.filter((l) => l.data.status === f.id).length,
+}));
+
+const textoBusca = (d: any) =>
+  normalizar(
+    [d.titulo, d.titulo_en, d.titulo_es, d.autor, d.area, d.area_en, d.area_es].filter(Boolean).join(' '),
+  );
+const alturaLombada = (s: string) => 20 + (s.length * 7) % 12;
 ---
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="refresh" content={`1; url=${destinos.pt}`} />
-    <title>…</title>
-    <script is:inline define:vars={{ destinos }}>
-      const l = (navigator.language || 'pt').slice(0, 2);
-      location.replace(destinos[l] || destinos.pt);
-    </script>
-  </head>
-  <body><a href={destinos.pt}>Entrar</a></body>
-</html>
+<Base lang={lang} titulo={t(lang, 'bib.titulo')} descricao={t(lang, 'bib.intro')}>
+  <div class="wrap">
+    <header class="cabecalho-pagina">
+      <h1>{t(lang, 'bib.titulo')}</h1>
+      <p class="lede">{t(lang, 'bib.intro')}</p>
+    </header>
+
+    <div class="controles">
+      <label class="busca">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M10.5 3a7.5 7.5 0 0 1 5.96 12.05l4.25 4.24a1 1 0 0 1-1.42 1.42l-4.24-4.25A7.5 7.5 0 1 1 10.5 3Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"/></svg>
+        <span class="sr-only">{t(lang, 'bib.buscar')}</span>
+        <input type="search" placeholder={t(lang, 'bib.buscar')} autocomplete="off" />
+      </label>
+
+      <div class="linha-controles">
+        <div class="filtros" role="group" aria-label={t(lang, 'bib.status')}>
+          {filtros.map((f, i) => (
+            <button type="button" data-filtro={f.id} aria-pressed={i === 0 ? 'true' : 'false'} disabled={f.qtd === 0}>
+              {f.rotulo} <span>{f.qtd}</span>
+            </button>
+          ))}
+        </div>
+        <button type="button" class="alternar" data-abrir={t(lang, 'bib.expandir')} data-fechar={t(lang, 'bib.recolher')}>
+          {t(lang, 'bib.expandir')}
+        </button>
+      </div>
+    </div>
+
+    <div class="grupos">
+      {grupos.map((g) => (
+        <details class="grupo" data-grupo={g.chave}>
+          <summary>
+            <span class="g-nome">{g.rotulo}</span>
+            <span class="g-qtd" data-qtd>{g.livros.length}</span>
+            <span class="lombadas" aria-hidden="true">
+              {g.livros.slice(0, 14).map((l) => (
+                <span style={`background:${corCapa(l.data.titulo)[0]};height:${alturaLombada(l.data.titulo)}px`}></span>
+              ))}
+            </span>
+            <span class="seta" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M6.3 9.3a1 1 0 0 1 1.4 0L12 13.6l4.3-4.3a1 1 0 1 1 1.4 1.4l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 0 1 0-1.4Z"/></svg>
+            </span>
+          </summary>
+
+          <ul class="estante">
+            {g.livros.map((l) => (
+              <li data-status={l.data.status} data-busca={textoBusca(l.data)}>
+                <a href={url(`/${lang}/biblioteca/${l.id}/`)}>
+                  <Capa chave={l.data.titulo} titulo={campo(l.data, 'titulo', lang)} autor={l.data.autor} capa={l.data.capa} />
+                  <span class="livro-titulo">{campo(l.data, 'titulo', lang)}</span>
+                  <span class="livro-autor">{l.data.autor}</span>
+                  {l.data.status !== 'lido' && (
+                    <span class:list={['pill', 'selo', l.data.status]}>{t(lang, `bib.status.${l.data.status}` as any)}</span>
+                  )}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      ))}
+    </div>
+
+    <div class="vazio" hidden>
+      <p>{t(lang, 'bib.nenhum')}</p>
+      <button type="button" class="limpar">{t(lang, 'bib.limpar')}</button>
+    </div>
+  </div>
+</Base>
+
+<script>
+  const CHAVE = 'biblioteca-abertos';
+  const busca = document.querySelector<HTMLInputElement>('.busca input')!;
+  const botoes = [...document.querySelectorAll<HTMLButtonElement>('[data-filtro]')];
+  const grupos = [...document.querySelectorAll<HTMLDetailsElement>('.grupo')];
+  const vazio = document.querySelector<HTMLElement>('.vazio')!;
+  const alternar = document.querySelector<HTMLButtonElement>('.alternar')!;
+  const limpar = document.querySelector<HTMLButtonElement>('.limpar')!;
+
+  let status = 'todos';
+  const normalizar = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+  const filtrando = () => status !== 'todos' || normalizar(busca.value) !== '';
+
+  // Lembra quais tópicos a pessoa deixou abertos (só neste navegador).
+  function salvar() {
+    if (filtrando()) return;
+    try {
+      localStorage.setItem(CHAVE, JSON.stringify(grupos.filter((g) => g.open).map((g) => g.dataset.grupo)));
+    } catch {}
+  }
+  try {
+    const abertos: string[] = JSON.parse(localStorage.getItem(CHAVE) || '[]');
+    grupos.forEach((g) => (g.open = abertos.includes(g.dataset.grupo!)));
+  } catch {}
+
+  function atualizarBotao() {
+    const algumAberto = grupos.some((g) => g.open && !g.hidden);
+    alternar.textContent = algumAberto ? alternar.dataset.fechar! : alternar.dataset.abrir!;
+  }
+
+  function aplicar() {
+    const q = normalizar(busca.value);
+    let total = 0;
+    for (const g of grupos) {
+      let n = 0;
+      g.querySelectorAll<HTMLLIElement>('li').forEach((li) => {
+        const ok = (status === 'todos' || li.dataset.status === status) && (!q || li.dataset.busca!.includes(q));
+        li.hidden = !ok;
+        if (ok) n++;
+      });
+      g.hidden = n === 0;
+      g.querySelector('[data-qtd]')!.textContent = String(n);
+      if (filtrando() && n > 0) g.open = true;
+      total += n;
+    }
+    vazio.hidden = total > 0;
+    atualizarBotao();
+  }
+
+  botoes.forEach((b) =>
+    b.addEventListener('click', () => {
+      status = b.dataset.filtro!;
+      botoes.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      aplicar();
+    }),
+  );
+  busca.addEventListener('input', aplicar);
+
+  grupos.forEach((g) =>
+    g.addEventListener('toggle', () => {
+      atualizarBotao();
+      salvar();
+    }),
+  );
+
+  alternar.addEventListener('click', () => {
+    const abrir = !grupos.some((g) => g.open && !g.hidden);
+    grupos.forEach((g) => (g.open = abrir));
+    atualizarBotao();
+    salvar();
+  });
+
+  limpar.addEventListener('click', () => {
+    busca.value = '';
+    botoes[0].click();
+    busca.focus();
+  });
+
+  atualizarBotao();
+</script>
+
+<style>
+  .controles { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+  .busca {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 520px;
+    padding: 0 18px;
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--muted);
+    box-shadow: inset 0 0 0 2px transparent;
+    transition: box-shadow 0.2s;
+  }
+  .busca:focus-within { box-shadow: inset 0 0 0 2px var(--orange); }
+  .busca input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--ink);
+    padding: 13px 0;
+    outline: none;
+  }
+  .busca input::placeholder { color: var(--muted); }
+  .busca input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+
+  .linha-controles { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+  .filtros button, .alternar, .limpar {
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border: 0;
+    padding: 8px 16px;
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .filtros button span { color: var(--muted); font-weight: 500; margin-left: 2px; }
+  .filtros button[aria-pressed='true'] { background: var(--ink); color: var(--bg); }
+  .filtros button[aria-pressed='true'] span { color: var(--apricot); }
+  .filtros button:disabled { opacity: 0.4; cursor: default; }
+  .alternar { background: none; color: var(--orange-ink); padding-inline: 8px; }
+  .alternar:hover, .limpar:hover { background: var(--surface-2); }
+
+  /* ---------- tópicos recolhíveis ---------- */
+  .grupos { display: grid; gap: 12px; }
+  .grupo {
+    background: var(--surface);
+    border-radius: var(--r-lg);
+    interpolate-size: allow-keywords;
+  }
+  .grupo summary {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px 18px 28px;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--r-lg);
+  }
+  .grupo summary::-webkit-details-marker { display: none; }
+  .grupo summary:hover { background: var(--surface-2); }
+  .g-nome {
+    font-family: var(--font-display);
+    font-variation-settings: 'SOFT' 100;
+    font-size: 1.5rem;
+    font-weight: 560;
+    line-height: 1.2;
+  }
+  .g-qtd {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--orange-ink);
+    background: var(--bg);
+    padding: 0.2em 0.75em;
+    border-radius: var(--r-pill);
+  }
+  .lombadas {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    margin-left: auto;
+    height: 32px;
+  }
+  .lombadas span { width: 9px; border-radius: 4px; }
+  .seta {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg);
+    transition: transform 0.3s cubic-bezier(.3,1.4,.6,1);
+  }
+  .grupo[open] .seta { transform: rotate(180deg); }
+  .grupo[open] .lombadas { opacity: 0; }
+
+  .grupo::details-content {
+    height: 0;
+    overflow: clip;
+    transition: height 0.35s ease, content-visibility 0.35s allow-discrete;
+  }
+  .grupo[open]::details-content { height: auto; }
+
+  .estante {
+    list-style: none;
+    padding: 8px 28px 32px;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 32px 22px;
+  }
+  .estante a { display: flex; flex-direction: column; gap: 6px; color: var(--ink); text-decoration: none; }
+  .estante a :global(.capa) { transition: transform 0.3s cubic-bezier(.3,1.6,.6,1); margin-bottom: 8px; }
+  .estante a:hover :global(.capa) { transform: translateY(-6px) rotate(-1.5deg); }
+  .livro-titulo { font-weight: 700; line-height: 1.3; }
+  .livro-autor { color: var(--muted); font-size: 0.92rem; }
+  .selo { align-self: flex-start; margin-top: 4px; font-size: 0.75rem; background: var(--bg); }
+  .selo.lendo { background: var(--accent); color: var(--on-accent); }
+
+  .vazio { padding: 32px; text-align: center; color: var(--muted); }
+  .vazio .limpar { margin-top: 4px; }
+
+  @media (max-width: 640px) {
+    .grupo summary { padding: 16px 14px 16px 20px; gap: 10px; }
+    .g-nome { font-size: 1.25rem; }
+    .lombadas { display: none; }
+    .seta { margin-left: auto; }
+    .estante { padding: 4px 20px 24px; grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
+  }
+</style>

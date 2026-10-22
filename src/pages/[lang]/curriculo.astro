@@ -25,10 +25,10 @@ const premios = p.premios || [];
         <ol class="linha-tempo">
           {formacao.map((f: any) => (
             <li>
-              <span class="quando">{f.inicio}{f.fim && ` – ${f.fim}`}</span>
-              <h3>{f.curso}</h3>
-              <p class="onde">{f.instituicao}</p>
-              {f.descricao && <p>{f.descricao}</p>}
+              <span class="quando">{f.inicio}{campo(f, 'fim', lang) && ` – ${campo(f, 'fim', lang)}`}</span>
+              <h3>{campo(f, 'curso', lang)}</h3>
+              <p class="onde">{campo(f, 'instituicao', lang)}</p>
+              {campo(f, 'descricao', lang) && <p>{campo(f, 'descricao', lang)}</p>}
             </li>
           ))}
         </ol>
@@ -41,10 +41,10 @@ const premios = p.premios || [];
         <ol class="linha-tempo">
           {experiencias.map((e: any) => (
             <li>
-              {e.periodo && <span class="quando">{e.periodo}</span>}
-              <h3>{e.titulo}</h3>
-              {e.local && <p class="onde">{e.local}</p>}
-              {e.descricao && <p>{e.descricao}</p>}
+              {campo(e, 'periodo', lang) && <span class="quando">{campo(e, 'periodo', lang)}</span>}
+              <h3>{campo(e, 'titulo', lang)}</h3>
+              {campo(e, 'local', lang) && <p class="onde">{campo(e, 'local', lang)}</p>}
+              {campo(e, 'descricao', lang) && <p>{campo(e, 'descricao', lang)}</p>}
             </li>
           ))}
         </ol>
@@ -72,7 +72,7 @@ const premios = p.premios || [];
           {premios.map((pr: any) => (
             <li>
               {pr.ano && <span class="ano">{pr.ano}</span>}
-              <span>{pr.titulo}</span>
+              <span>{campo(pr, 'titulo', lang)}</span>
             </li>
           ))}
         </ul>

@@ -1,19 +1,10 @@
 ---
 // Capa de livro. Se não houver imagem, desenha uma capa com o título.
-import { url } from '../lib/util';
-interface Props { titulo: string; autor: string; capa?: string | null; grande?: boolean }
-const { titulo, autor, capa, grande = false } = Astro.props;
+import { url, corCapa } from '../lib/util';
+interface Props { titulo: string; autor: string; capa?: string | null; grande?: boolean; chave?: string }
+const { titulo, autor, capa, grande = false, chave } = Astro.props;
 
-const tons = [
-  ['var(--orange)', '#2d1b26'],
-  ['var(--plum)', 'var(--bg)'],
-  ['var(--apricot)', 'var(--ink)'],
-  ['var(--amber)', '#2d1b26'],
-  ['var(--surface-2)', 'var(--ink)'],
-];
-let h = 0;
-for (const c of titulo) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-const [fundo, texto] = tons[h % tons.length];
+const [fundo, texto] = corCapa(chave || titulo);
 ---
 <div class:list={['capa', { grande }]} style={`--fundo:${fundo};--texto:${texto}`}>
   {capa

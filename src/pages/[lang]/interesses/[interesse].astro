@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import { langs, t, type Lang } from '../../../i18n/ui';
-import { url, campo, paragrafos } from '../../../lib/util';
+import { url, campo, markdown } from '../../../lib/util';
 
 export async function getStaticPaths() {
   const lista = await getCollection('interesses');
@@ -26,7 +26,7 @@ const traduzido = lang !== 'pt' ? (d as any)[`texto_${lang}`] : null;
     </header>
 
     {traduzido
-      ? <div class="prose" set:html={paragrafos(traduzido)} />
+      ? <div class="prose" set:html={markdown(traduzido)} />
       : (
         <>
           {lang !== 'pt' && <p class="aviso">{t(lang, 'geral.traducao')}</p>}
