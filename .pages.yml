@@ -1,0 +1,198 @@
+# Configuração do painel de edição (Pages CMS: https://app.pagescms.org)
+# Cada item de "content" vira uma seção no painel.
+
+media:
+  - name: imagens
+    label: Imagens
+    input: public/imagens
+    output: /imagens
+    categories: [image]
+  - name: documentos
+    label: PDFs
+    input: public/documentos
+    output: /documentos
+    extensions: [pdf]
+
+content:
+  # ---------------- PERFIL / CURRÍCULO ----------------
+  - name: perfil
+    label: Perfil e currículo
+    type: file
+    path: src/data/perfil.yml
+    format: yaml
+    fields:
+      - { name: nome, label: Nome completo, type: string, required: true }
+      - { name: nome_curto, label: Nome curto (aparece no menu), type: string }
+      - { name: titulo, label: Título (ex. Estudante de Física), type: string }
+      - { name: titulo_en, label: Título em inglês, type: string }
+      - { name: titulo_es, label: Título em espanhol, type: string }
+      - { name: bio, label: Bio, type: text }
+      - { name: bio_en, label: Bio em inglês, type: text }
+      - { name: bio_es, label: Bio em espanhol, type: text }
+      - { name: foto, label: Foto, type: image, options: { media: imagens } }
+      - { name: email, label: E-mail público, type: string }
+      - { name: lattes, label: Link do Lattes, type: string }
+      - name: links
+        label: Outros links
+        type: object
+        list: true
+        fields:
+          - { name: nome, label: Nome, type: string }
+          - { name: url, label: Endereço, type: string }
+      - name: formacao
+        label: Formação
+        type: object
+        list: true
+        fields:
+          - { name: curso, label: Curso, type: string }
+          - { name: instituicao, label: Instituição, type: string }
+          - { name: inicio, label: Início, type: string }
+          - { name: fim, label: Fim, type: string }
+          - { name: descricao, label: Descrição, type: text }
+      - name: experiencias
+        label: Pesquisa e atuação
+        type: object
+        list: true
+        fields:
+          - { name: titulo, label: Título, type: string }
+          - { name: local, label: Local, type: string }
+          - { name: periodo, label: Período, type: string }
+          - { name: descricao, label: Descrição, type: text }
+      - name: publicacoes
+        label: Publicações
+        type: object
+        list: true
+        fields:
+          - { name: referencia, label: Referência, type: text }
+          - { name: ano, label: Ano, type: string }
+          - { name: link, label: Link, type: string }
+      - name: premios
+        label: Prêmios
+        type: object
+        list: true
+        fields:
+          - { name: titulo, label: Prêmio, type: string }
+          - { name: ano, label: Ano, type: string }
+
+  # ---------------- BIBLIOTECA ----------------
+  - name: livros
+    label: Biblioteca
+    type: collection
+    path: src/content/livros
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, autor, status]
+      primary: titulo
+      sort: titulo
+    fields:
+      - { name: titulo, label: Título, type: string, required: true }
+      - { name: autor, label: Autor, type: string, required: true }
+      - { name: ano, label: Ano, type: number }
+      - { name: capa, label: Capa (opcional), type: image, options: { media: imagens } }
+      - name: status
+        label: Status
+        type: select
+        default: lido
+        options:
+          values:
+            - { name: lido, label: Lido }
+            - { name: lendo, label: Lendo agora }
+            - { name: quero-ler, label: Quero ler }
+            - { name: consulta, label: Para consulta }
+      - { name: nota, label: Nota (0 a 5), type: number }
+      - { name: area, label: Área, type: string }
+      - { name: usei_para, label: Para que usei, type: text }
+      - { name: body, label: Minha impressão, type: rich-text }
+      - { name: usei_para_en, label: Para que usei (inglês), type: text }
+      - { name: usei_para_es, label: Para que usei (espanhol), type: text }
+      - { name: impressao_en, label: Impressão (inglês), type: text }
+      - { name: impressao_es, label: Impressão (espanhol), type: text }
+
+  # ---------------- CAMINHO ----------------
+  - name: disciplinas
+    label: Caminho (disciplinas)
+    type: collection
+    path: src/content/disciplinas
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, etapa, status]
+      primary: titulo
+      sort: etapa
+    fields:
+      - { name: titulo, label: Disciplina, type: string, required: true }
+      - { name: etapa, label: Etapa no mapa (1, 2, 3...), type: number, required: true }
+      - name: status
+        label: Status
+        type: select
+        default: planejada
+        options:
+          values:
+            - { name: concluida, label: Concluída }
+            - { name: cursando, label: Cursando }
+            - { name: planejada, label: Planejada }
+            - { name: sonho, label: Objetivo final }
+      - { name: periodo, label: Período (ex. 2024.1), type: string }
+      - { name: comentario, label: Comentário curto, type: string }
+      - { name: titulo_en, label: Nome em inglês, type: string }
+      - { name: titulo_es, label: Nome em espanhol, type: string }
+      - { name: comentario_en, label: Comentário em inglês, type: string }
+      - { name: comentario_es, label: Comentário em espanhol, type: string }
+
+  # ---------------- INTERESSES ----------------
+  - name: interesses
+    label: Interesses
+    type: collection
+    path: src/content/interesses
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, ordem]
+      primary: titulo
+      sort: ordem
+    fields:
+      - { name: titulo, label: Título, type: string, required: true }
+      - { name: resumo, label: Resumo (uma frase), type: string, required: true }
+      - { name: desde, label: Desde (ano), type: string }
+      - { name: ordem, label: Ordem na lista, type: number, default: 10 }
+      - { name: body, label: Texto, type: rich-text }
+      - { name: titulo_en, label: Título em inglês, type: string }
+      - { name: resumo_en, label: Resumo em inglês, type: string }
+      - { name: texto_en, label: Texto em inglês, type: text }
+      - { name: titulo_es, label: Título em espanhol, type: string }
+      - { name: resumo_es, label: Resumo em espanhol, type: string }
+      - { name: texto_es, label: Texto em espanhol, type: text }
+
+  # ---------------- DOCUMENTOS ----------------
+  - name: documentos
+    label: Documentos (PDFs)
+    type: collection
+    path: src/content/documentos
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, tipo, data]
+      primary: titulo
+      sort: data
+      order: desc
+    fields:
+      - { name: titulo, label: Título, type: string, required: true }
+      - name: tipo
+        label: Tipo
+        type: select
+        default: notas
+        options:
+          values:
+            - { name: notas, label: Notas de aula }
+            - { name: relatorio, label: Relatório }
+            - { name: artigo, label: Artigo }
+            - { name: apresentacao, label: Apresentação }
+            - { name: outro, label: Outro }
+      - { name: data, label: Data, type: date, required: true }
+      - { name: arquivo, label: Arquivo PDF, type: file, required: true, options: { media: documentos } }
+      - { name: descricao, label: Descrição, type: text }
+      - { name: titulo_en, label: Título em inglês, type: string }
+      - { name: descricao_en, label: Descrição em inglês, type: text }
+      - { name: titulo_es, label: Título em espanhol, type: string }
+      - { name: descricao_es, label: Descrição em espanhol, type: text }
