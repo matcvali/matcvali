@@ -1,0 +1,346 @@
+# Todos os textos fixos do site (menus, títulos, botões, avisos), nos 3 idiomas.
+# Edite pelo painel em "Textos do site" ou direto aqui.
+# Se um idioma ficar vazio, o site usa o português.
+
+geral:
+  traducao:
+    pt: Este texto ainda não foi traduzido, então aparece em português.
+    en: This text has not been translated yet, so it is shown in Portuguese.
+    es: Este texto aún no fue traducido, por eso aparece en portugués.
+  contato:
+    pt: Contato
+    en: Contact
+    es: Contacto
+  tema:
+    pt: Alternar tema claro e escuro
+    en: Toggle light and dark theme
+    es: Cambiar tema claro y oscuro
+  idioma:
+    pt: Idioma
+    en: Language
+    es: Idioma
+  pular:
+    pt: Pular para o conteúdo
+    en: Skip to content
+    es: Saltar al contenido
+  menu:
+    pt: Menu
+    en: Menu
+    es: Menú
+  lattes:
+    pt: Lattes
+    en: Lattes
+    es: Lattes
+nav:
+  inicio:
+    pt: Início
+    en: Home
+    es: Inicio
+  biblioteca:
+    pt: Biblioteca
+    en: Library
+    es: Biblioteca
+  caminho:
+    pt: Caminho
+    en: Path
+    es: Camino
+  interesses:
+    pt: Interesses
+    en: Interests
+    es: Intereses
+  documentos:
+    pt: Documentos
+    en: Documents
+    es: Documentos
+  curriculo:
+    pt: Currículo
+    en: CV
+    es: Currículum
+inicio:
+  explore:
+    pt: Explorar o site
+    en: Explore the site
+    es: Explorar el sitio
+  biblioteca:
+    pt: Os livros da minha estante e o que cada um me deu.
+    en: The books on my shelf and what each one gave me.
+    es: Los libros de mi estante y lo que cada uno me dio.
+  caminho:
+    pt: As disciplinas que já cursei e as que ainda quero cursar.
+    en: Courses I have taken and the ones I still want to take.
+    es: Las asignaturas que ya cursé y las que aún quiero cursar.
+  interesses:
+    pt: O que me interessa, como começou e o que faço a respeito.
+    en: What interests me, how it began and what I do about it.
+    es: Lo que me interesa, cómo empezó y qué hago al respecto.
+  documentos:
+    pt: Notas de aula, relatórios e outros textos meus.
+    en: Lecture notes, reports and other texts of mine.
+    es: Apuntes, informes y otros textos míos.
+  curriculo:
+    pt: Formação, pesquisa, publicações e prêmios.
+    en: Education, research, publications and awards.
+    es: Formación, investigación, publicaciones y premios.
+  pesquisa:
+    pt: Pesquisa atual
+    en: Current research
+    es: Investigación actual
+  cursando:
+    pt: Cursando agora
+    en: Taking now
+    es: Cursando ahora
+  objetivo:
+    pt: Objetivo
+    en: Goal
+    es: Objetivo
+bv:
+  rotulo:
+    pt: Boas-vindas
+    en: Welcome
+    es: Bienvenida
+  ola:
+    pt: Bem-vindo ao meu portfólio
+    en: Welcome to my portfolio
+    es: Bienvenido a mi portafolio
+  idioma_titulo:
+    pt: Escolha o idioma
+    en: Choose your language
+    es: Elige tu idioma
+  idioma_nota:
+    pt: Dá para mudar depois, no topo da página.
+    en: You can change it later at the top of the page.
+    es: Puedes cambiarlo después, arriba en la página.
+  tema_titulo:
+    pt: Claro ou escuro?
+    en: Light or dark?
+    es: ¿Claro u oscuro?
+  tema_nota:
+    pt: Também dá para trocar depois, no botão do topo.
+    en: You can switch later with the button at the top.
+    es: También puedes cambiarlo después con el botón de arriba.
+  claro:
+    pt: Claro
+    en: Light
+    es: Claro
+  escuro:
+    pt: Escuro
+    en: Dark
+    es: Oscuro
+  pular:
+    pt: Pular
+    en: Skip
+    es: Saltar
+bib:
+  titulo:
+    pt: Biblioteca
+    en: Library
+    es: Biblioteca
+  intro:
+    pt: Todos os livros da minha estante, com o que achei de cada um e para que usei.
+    en: Every book on my shelf, what I thought of it and what I used it for.
+    es: Todos los libros de mi estante, lo que pensé de cada uno y para qué lo usé.
+  todos:
+    pt: Todos
+    en: All
+    es: Todos
+  lido:
+    pt: Lidos
+    en: Read
+    es: Leídos
+  lendo:
+    pt: Lendo
+    en: Reading
+    es: Leyendo
+  quero_ler:
+    pt: Quero ler
+    en: Want to read
+    es: Quiero leer
+  consulta:
+    pt: Consulta
+    en: Reference
+    es: Consulta
+  status_lido:
+    pt: Lido
+    en: Read
+    es: Leído
+  status_lendo:
+    pt: Lendo agora
+    en: Reading now
+    es: Leyendo ahora
+  status_quero_ler:
+    pt: Na fila
+    en: In the queue
+    es: En la fila
+  status_consulta:
+    pt: Para consulta
+    en: For reference
+    es: De consulta
+  impressao:
+    pt: Minha impressão
+    en: My impression
+    es: Mi impresión
+  usei:
+    pt: Para que usei
+    en: What I used it for
+    es: Para qué lo usé
+  voltar:
+    pt: Voltar para a biblioteca
+    en: Back to the library
+    es: Volver a la biblioteca
+  vazio:
+    pt: Nenhum livro nesta categoria ainda.
+    en: No books in this category yet.
+    es: Aún no hay libros en esta categoría.
+  livros:
+    pt: livros
+    en: books
+    es: libros
+  buscar:
+    pt: Buscar por título, autor ou tópico
+    en: Search by title, author or topic
+    es: Buscar por título, autor o tema
+  limpar:
+    pt: Limpar filtros
+    en: Clear filters
+    es: Borrar filtros
+  expandir:
+    pt: Abrir todos os tópicos
+    en: Open all topics
+    es: Abrir todos los temas
+  recolher:
+    pt: Fechar todos os tópicos
+    en: Close all topics
+    es: Cerrar todos los temas
+  outros:
+    pt: Sem tópico
+    en: No topic
+    es: Sin tema
+  nenhum:
+    pt: Nenhum livro encontrado. Tente outro termo ou limpe os filtros.
+    en: No books found. Try another term or clear the filters.
+    es: No se encontraron libros. Prueba otro término o borra los filtros.
+  status:
+    pt: Status
+    en: Status
+    es: Estado
+cam:
+  titulo:
+    pt: Caminho
+    en: Path
+    es: Camino
+  intro:
+    pt: Meu mapa de disciplinas. O que já foi, o que está acontecendo e onde quero chegar.
+    en: My course map. What is done, what is happening and where I want to go.
+    es: Mi mapa de asignaturas. Lo que ya pasó, lo que está pasando y adónde quiero llegar.
+  etapa:
+    pt: Etapa
+    en: Stage
+    es: Etapa
+  concluida:
+    pt: Concluída
+    en: Completed
+    es: Aprobada
+  cursando:
+    pt: Cursando
+    en: In progress
+    es: Cursando
+  planejada:
+    pt: Planejada
+    en: Planned
+    es: Planeada
+  sonho:
+    pt: Objetivo
+    en: Goal
+    es: Objetivo
+  progresso:
+    pt: disciplinas concluídas
+    en: courses completed
+    es: asignaturas aprobadas
+int:
+  titulo:
+    pt: Interesses
+    en: Interests
+    es: Intereses
+  intro:
+    pt: Assuntos que me puxam, como surgiram e o que estou fazendo com eles.
+    en: Subjects that pull me in, how they started and what I am doing with them.
+    es: Temas que me atraen, cómo surgieron y qué estoy haciendo con ellos.
+  desde:
+    pt: Desde
+    en: Since
+    es: Desde
+  voltar:
+    pt: Voltar para interesses
+    en: Back to interests
+    es: Volver a intereses
+doc:
+  titulo:
+    pt: Documentos
+    en: Documents
+    es: Documentos
+  intro:
+    pt: 'Textos que escrevi: notas de disciplinas, relatórios de iniciação científica e afins.'
+    en: 'Texts I wrote: course notes, research reports and the like.'
+    es: 'Textos que escribí: apuntes de asignaturas, informes de investigación y similares.'
+  vazio:
+    pt: Nenhum documento publicado ainda.
+    en: No documents published yet.
+    es: Todavía no hay documentos publicados.
+  abrir:
+    pt: Abrir PDF
+    en: Open PDF
+    es: Abrir PDF
+  tipo_notas:
+    pt: Notas de aula
+    en: Lecture notes
+    es: Apuntes
+  tipo_relatorio:
+    pt: Relatório
+    en: Report
+    es: Informe
+  tipo_artigo:
+    pt: Artigo
+    en: Paper
+    es: Artículo
+  tipo_apresentacao:
+    pt: Apresentação
+    en: Slides
+    es: Presentación
+  tipo_outro:
+    pt: Outro
+    en: Other
+    es: Otro
+cv:
+  titulo:
+    pt: Currículo
+    en: CV
+    es: Currículum
+  formacao:
+    pt: Formação
+    en: Education
+    es: Formación
+  experiencias:
+    pt: Pesquisa e atuação
+    en: Research and experience
+    es: Investigación y experiencia
+  publicacoes:
+    pt: Publicações
+    en: Publications
+    es: Publicaciones
+  premios:
+    pt: Prêmios e distinções
+    en: Awards
+    es: Premios
+  lattes:
+    pt: Ver currículo Lattes completo
+    en: See full Lattes CV
+    es: Ver currículum Lattes completo
+sobre:
+  titulo:
+    pt: Como este site foi feito
+    en: How this site was made
+    es: Cómo se hizo este sitio
+  link:
+    pt: Como este site foi feito
+    en: How this site was made
+    es: Cómo se hizo este sitio

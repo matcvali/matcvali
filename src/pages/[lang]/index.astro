@@ -52,7 +52,7 @@ const secoes = [
     <p class="bio">{campo(p, 'bio', lang)}</p>
     <div class="acoes">
       {p.email && <a class="botao" href={`mailto:${p.email}`}>{t(lang, 'geral.contato')}</a>}
-      {p.lattes && <a class="secundario" href={p.lattes} target="_blank" rel="noopener">Lattes</a>}
+      {p.lattes && <a class="secundario" href={p.lattes} target="_blank" rel="noopener">{t(lang, 'geral.lattes')}</a>}
       {(p.links || []).map((l: any) => (
         <a class="secundario" href={l.url} target="_blank" rel="noopener">{campo(l, 'nome', lang)}</a>
       ))}

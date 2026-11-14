@@ -38,6 +38,8 @@ content:
         list: true
         fields:
           - { name: nome, label: Nome, type: string }
+          - { name: nome_en, label: Nome (inglês), type: string }
+          - { name: nome_es, label: Nome (espanhol), type: string }
           - { name: url, label: Endereço, type: string }
       - name: formacao
         label: Formação
@@ -47,8 +49,16 @@ content:
           - { name: curso, label: Curso, type: string }
           - { name: instituicao, label: Instituição, type: string }
           - { name: inicio, label: Início, type: string }
-          - { name: fim, label: Fim, type: string }
+          - { name: fim, label: Fim (ex. em andamento), type: string }
           - { name: descricao, label: Descrição, type: text }
+          - { name: curso_en, label: Curso (inglês), type: string }
+          - { name: instituicao_en, label: Instituição (inglês), type: string }
+          - { name: fim_en, label: Fim (inglês), type: string }
+          - { name: descricao_en, label: Descrição (inglês), type: text }
+          - { name: curso_es, label: Curso (espanhol), type: string }
+          - { name: instituicao_es, label: Instituição (espanhol), type: string }
+          - { name: fim_es, label: Fim (espanhol), type: string }
+          - { name: descricao_es, label: Descrição (espanhol), type: text }
       - name: experiencias
         label: Pesquisa e atuação
         type: object
@@ -58,12 +68,22 @@ content:
           - { name: local, label: Local, type: string }
           - { name: periodo, label: Período, type: string }
           - { name: descricao, label: Descrição, type: text }
+          - { name: titulo_en, label: Título (inglês), type: string }
+          - { name: local_en, label: Local (inglês), type: string }
+          - { name: periodo_en, label: Período (inglês), type: string }
+          - { name: descricao_en, label: Descrição (inglês), type: text }
+          - { name: titulo_es, label: Título (espanhol), type: string }
+          - { name: local_es, label: Local (espanhol), type: string }
+          - { name: periodo_es, label: Período (espanhol), type: string }
+          - { name: descricao_es, label: Descrição (espanhol), type: text }
       - name: publicacoes
         label: Publicações
         type: object
         list: true
         fields:
           - { name: referencia, label: Referência, type: text }
+          - { name: referencia_en, label: Referência (inglês), type: text }
+          - { name: referencia_es, label: Referência (espanhol), type: text }
           - { name: ano, label: Ano, type: string }
           - { name: link, label: Link, type: string }
       - name: premios
@@ -72,6 +92,8 @@ content:
         list: true
         fields:
           - { name: titulo, label: Prêmio, type: string }
+          - { name: titulo_en, label: Prêmio (inglês), type: string }
+          - { name: titulo_es, label: Prêmio (espanhol), type: string }
           - { name: ano, label: Ano, type: string }
 
   # ---------------- BIBLIOTECA ----------------
@@ -87,6 +109,8 @@ content:
       sort: titulo
     fields:
       - { name: titulo, label: Título, type: string, required: true }
+      - { name: titulo_en, label: Título (inglês), type: string }
+      - { name: titulo_es, label: Título (espanhol), type: string }
       - { name: autor, label: Autor, type: string, required: true }
       - { name: ano, label: Ano, type: number }
       - { name: capa, label: Capa (opcional), type: image, options: { media: imagens } }
@@ -102,12 +126,14 @@ content:
             - { name: consulta, label: Para consulta }
       - { name: nota, label: Nota (0 a 5), type: number }
       - { name: area, label: Área, type: string }
+      - { name: area_en, label: Área (inglês), type: string }
+      - { name: area_es, label: Área (espanhol), type: string }
       - { name: usei_para, label: Para que usei, type: text }
-      - { name: body, label: Minha impressão, type: rich-text }
       - { name: usei_para_en, label: Para que usei (inglês), type: text }
       - { name: usei_para_es, label: Para que usei (espanhol), type: text }
-      - { name: impressao_en, label: Impressão (inglês), type: text }
-      - { name: impressao_es, label: Impressão (espanhol), type: text }
+      - { name: body, label: Minha impressão, type: rich-text, options: { format: markdown } }
+      - { name: impressao_en, label: Minha impressão (inglês), type: rich-text, options: { format: markdown } }
+      - { name: impressao_es, label: Minha impressão (espanhol), type: rich-text, options: { format: markdown } }
 
   # ---------------- CAMINHO ----------------
   - name: disciplinas
@@ -156,13 +182,13 @@ content:
       - { name: resumo, label: Resumo (uma frase), type: string, required: true }
       - { name: desde, label: Desde (ano), type: string }
       - { name: ordem, label: Ordem na lista, type: number, default: 10 }
-      - { name: body, label: Texto, type: rich-text }
+      - { name: body, label: Texto, type: rich-text, options: { format: markdown } }
       - { name: titulo_en, label: Título em inglês, type: string }
       - { name: resumo_en, label: Resumo em inglês, type: string }
-      - { name: texto_en, label: Texto em inglês, type: text }
+      - { name: texto_en, label: Texto em inglês, type: rich-text, options: { format: markdown } }
       - { name: titulo_es, label: Título em espanhol, type: string }
       - { name: resumo_es, label: Resumo em espanhol, type: string }
-      - { name: texto_es, label: Texto em espanhol, type: text }
+      - { name: texto_es, label: Texto em espanhol, type: rich-text, options: { format: markdown } }
 
   # ---------------- DOCUMENTOS ----------------
   - name: documentos
@@ -196,3 +222,646 @@ content:
       - { name: descricao_en, label: Descrição em inglês, type: text }
       - { name: titulo_es, label: Título em espanhol, type: string }
       - { name: descricao_es, label: Descrição em espanhol, type: text }
+
+  # ---------------- COMO ESTE SITE FOI FEITO ----------------
+  - name: sobre
+    label: Como este site foi feito
+    type: file
+    path: src/content/sobre/site.md
+    format: yaml-frontmatter
+    fields:
+      - { name: titulo, label: Título, type: string, required: true }
+      - { name: body, label: Texto, type: rich-text, options: { format: markdown } }
+      - { name: titulo_en, label: Título (inglês), type: string }
+      - { name: texto_en, label: Texto (inglês), type: rich-text, options: { format: markdown } }
+      - { name: titulo_es, label: Título (espanhol), type: string }
+      - { name: texto_es, label: Texto (espanhol), type: rich-text, options: { format: markdown } }
+
+  # ---------------- TEXTOS DO SITE ----------------
+  - name: textos
+    label: Textos do site (menus, títulos e botões)
+    type: file
+    path: src/data/textos.yml
+    format: yaml
+    fields:
+      - name: geral
+        label: Geral (botões e avisos)
+        type: object
+        fields:
+          - name: traducao
+            label: "Este texto ainda não foi traduzido, então aparece em port..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: contato
+            label: "Contato"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tema
+            label: "Alternar tema claro e escuro"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: idioma
+            label: "Idioma"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: pular
+            label: "Pular para o conteúdo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: menu
+            label: "Menu"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: lattes
+            label: "Lattes"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: nav
+        label: Menu do topo
+        type: object
+        fields:
+          - name: inicio
+            label: "Início"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: biblioteca
+            label: "Biblioteca"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: caminho
+            label: "Caminho"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: interesses
+            label: "Interesses"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: documentos
+            label: "Documentos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: curriculo
+            label: "Currículo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: inicio
+        label: Página inicial
+        type: object
+        fields:
+          - name: explore
+            label: "Explorar o site"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: biblioteca
+            label: "Os livros da minha estante e o que cada um me deu."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: caminho
+            label: "As disciplinas que já cursei e as que ainda quero cursar."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: interesses
+            label: "O que me interessa, como começou e o que faço a respeito."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: documentos
+            label: "Notas de aula, relatórios e outros textos meus."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: curriculo
+            label: "Formação, pesquisa, publicações e prêmios."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: pesquisa
+            label: "Pesquisa atual"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: cursando
+            label: "Cursando agora"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: objetivo
+            label: "Objetivo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: bv
+        label: Apresentação da primeira visita
+        type: object
+        fields:
+          - name: rotulo
+            label: "Boas-vindas"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: ola
+            label: "Bem-vindo ao meu portfólio"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: idioma_titulo
+            label: "Escolha o idioma"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: idioma_nota
+            label: "Dá para mudar depois, no topo da página."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tema_titulo
+            label: "Claro ou escuro?"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tema_nota
+            label: "Também dá para trocar depois, no botão do topo."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: claro
+            label: "Claro"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: escuro
+            label: "Escuro"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: pular
+            label: "Pular"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: bib
+        label: Biblioteca
+        type: object
+        fields:
+          - name: titulo
+            label: "Biblioteca"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: intro
+            label: "Todos os livros da minha estante, com o que achei de cada..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: text }
+              - { name: en, label: Inglês, type: text }
+              - { name: es, label: Espanhol, type: text }
+          - name: todos
+            label: "Todos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: lido
+            label: "Lidos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: lendo
+            label: "Lendo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: quero_ler
+            label: "Quero ler"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: consulta
+            label: "Consulta"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: status_lido
+            label: "Lido"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: status_lendo
+            label: "Lendo agora"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: status_quero_ler
+            label: "Na fila"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: status_consulta
+            label: "Para consulta"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: impressao
+            label: "Minha impressão"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: usei
+            label: "Para que usei"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: voltar
+            label: "Voltar para a biblioteca"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: vazio
+            label: "Nenhum livro nesta categoria ainda."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: livros
+            label: "livros"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: buscar
+            label: "Buscar por título, autor ou tópico"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: limpar
+            label: "Limpar filtros"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: expandir
+            label: "Abrir todos os tópicos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: recolher
+            label: "Fechar todos os tópicos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: outros
+            label: "Sem tópico"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: nenhum
+            label: "Nenhum livro encontrado. Tente outro termo ou limpe os fi..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: status
+            label: "Status"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: cam
+        label: Caminho
+        type: object
+        fields:
+          - name: titulo
+            label: "Caminho"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: intro
+            label: "Meu mapa de disciplinas. O que já foi, o que está acontec..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: text }
+              - { name: en, label: Inglês, type: text }
+              - { name: es, label: Espanhol, type: text }
+          - name: etapa
+            label: "Etapa"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: concluida
+            label: "Concluída"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: cursando
+            label: "Cursando"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: planejada
+            label: "Planejada"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: sonho
+            label: "Objetivo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: progresso
+            label: "disciplinas concluídas"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: int
+        label: Interesses
+        type: object
+        fields:
+          - name: titulo
+            label: "Interesses"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: intro
+            label: "Assuntos que me puxam, como surgiram e o que estou fazend..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: text }
+              - { name: en, label: Inglês, type: text }
+              - { name: es, label: Espanhol, type: text }
+          - name: desde
+            label: "Desde"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: voltar
+            label: "Voltar para interesses"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: doc
+        label: Documentos
+        type: object
+        fields:
+          - name: titulo
+            label: "Documentos"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: intro
+            label: "Textos que escrevi: notas de disciplinas, relatórios de i..."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: text }
+              - { name: en, label: Inglês, type: text }
+              - { name: es, label: Espanhol, type: text }
+          - name: vazio
+            label: "Nenhum documento publicado ainda."
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: abrir
+            label: "Abrir PDF"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tipo_notas
+            label: "Notas de aula"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tipo_relatorio
+            label: "Relatório"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tipo_artigo
+            label: "Artigo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tipo_apresentacao
+            label: "Apresentação"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: tipo_outro
+            label: "Outro"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: cv
+        label: Currículo
+        type: object
+        fields:
+          - name: titulo
+            label: "Currículo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: formacao
+            label: "Formação"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: experiencias
+            label: "Pesquisa e atuação"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: publicacoes
+            label: "Publicações"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: premios
+            label: "Prêmios e distinções"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: lattes
+            label: "Ver currículo Lattes completo"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: sobre
+        label: Como este site foi feito
+        type: object
+        fields:
+          - name: titulo
+            label: "Como este site foi feito"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: link
+            label: "Como este site foi feito"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }

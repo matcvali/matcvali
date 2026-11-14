@@ -64,7 +64,7 @@ const ano = new Date().getFullYear();
     <a class="sr-only" href="#conteudo">{t(lang, 'geral.pular')}</a>
 
     <header class="topo">
-      <nav class="barra wrap" aria-label="Menu">
+      <nav class="barra wrap" aria-label={t(lang, 'geral.menu')}>
         <a class="marca" href={url(`/${lang}/`)}>
           <span class="marca-ponto" aria-hidden="true"></span>
           {nomeSite}
@@ -111,7 +111,7 @@ const ano = new Date().getFullYear();
             {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
           </div>
           <ul class="rodape-links">
-            {p.lattes && <li><a href={p.lattes} rel="noopener" target="_blank">Lattes</a></li>}
+            {p.lattes && <li><a href={p.lattes} rel="noopener" target="_blank">{t(lang, 'geral.lattes')}</a></li>}
             {(p.links || []).map((l: any) => (
               <li><a href={l.url} rel="noopener" target="_blank">{campo(l, 'nome', lang)}</a></li>
             ))}

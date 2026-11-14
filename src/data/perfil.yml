@@ -3,31 +3,57 @@ nome_curto: Mateus μ
 titulo: Estudante de Física
 titulo_en: Physics Undergraduate Student
 titulo_es: Estudiante de grado en Física
-bio: Meu nome é Mateus e eu gosto de física. Por isso, decidi fazer uma
-  graduação. Simples assim.
-bio_en: My name is Mateus, and I like physics. That's why I decided to pursue an
-  undergraduate degree. Simple as that.
-bio_es: Me llamo Mateus y me gusta la física. Por eso, decidí cursar una carrera
-  universitaria. Así de simple.
+bio: Meu nome é Mateus e eu gosto de física. Por isso, decidi fazer uma graduação. Simples assim.
+bio_en: My name is Mateus, and I like physics. That's why I decided to pursue an undergraduate degree.
+  Simple as that.
+bio_es: Me llamo Mateus y me gusta la física. Por eso, decidí cursar una carrera universitaria. Así de
+  simple.
 foto: /imagens/2e608ba2-e409-4964-a42f-83ad777146ca.jpg
 email: mcvali@usp.br
 lattes: http://lattes.cnpq.br/7921524024782122
 formacao:
-  - curso: Bacharelado em Física
-    instituicao: Universidade de São Paulo
-    inicio: "2025"
-    fim: Em andamento, previsto para 2028.
-    descricao: Ênfase em QCD, especialmente confinamento de Quarks e Grupos de
-      renormalização. Orientação da Profª. Drª. Ana Julia Sulveira Mizher
+- curso: Bacharelado em Física
+  instituicao: Universidade de São Paulo
+  inicio: '2025'
+  fim: Em andamento, previsto para 2028.
+  descricao: Ênfase em QCD, especialmente confinamento de Quarks e Grupos de renormalização. Orientação
+    da Profª. Drª. Ana Julia Sulveira Mizher
+  curso_en: Bachelor of Science in Physics
+  curso_es: Grado en Física
+  instituicao_en: University of São Paulo
+  instituicao_es: Universidad de São Paulo
+  fim_en: In progress, expected 2028.
+  fim_es: En curso, prevista para 2028.
+  descricao_en: Emphasis on QCD, especially quark confinement and the renormalization group. Advised by
+    Prof. Dr. Ana Julia Sulveira Mizher.
+  descricao_es: Énfasis en QCD, especialmente en el confinamiento de quarks y el grupo de renormalización.
+    Orientación de la Prof.ª Dra. Ana Julia Sulveira Mizher.
 experiencias:
-  - titulo: Iniciação Científica
-    local: Instituto de Física da Universidade de São Paulo (IFUSP)
-    periodo: 2025-2026
-    descricao: "Estudos para preparar uma base sólida para teoria quântica de
-      campos. Tópicos abordados foram: mecânica quântica, mecânica clássica,
-      relatividade restrita e introdução à física de partículas."
-  - titulo: Iniciação científica
-    local: Instituto de Física da Universidade de São Paulo (IFUSP)
-    periodo: 2026-Atual
-    descricao: Descrições Efetivas de Baixas Energias e Fluxos do Grupo de
-      Renormalização em Mecânica Quântica
+- titulo: Iniciação Científica
+  local: Instituto de Física da Universidade de São Paulo (IFUSP)
+  periodo: 2025-2026
+  descricao: 'Estudos para preparar uma base sólida para teoria quântica de campos. Tópicos abordados
+    foram: mecânica quântica, mecânica clássica, relatividade restrita e introdução à física de partículas.'
+  titulo_en: Undergraduate Research
+  titulo_es: Iniciación Científica
+  local_en: Institute of Physics, University of São Paulo (IFUSP)
+  local_es: Instituto de Física de la Universidad de São Paulo (IFUSP)
+  periodo_en: 2025-2026
+  periodo_es: 2025-2026
+  descricao_en: 'Studies to build a solid foundation for quantum field theory. Topics covered: quantum
+    mechanics, classical mechanics, special relativity and an introduction to particle physics.'
+  descricao_es: 'Estudios para construir una base sólida en teoría cuántica de campos. Temas abordados:
+    mecánica cuántica, mecánica clásica, relatividad especial e introducción a la física de partículas.'
+- titulo: Iniciação científica
+  local: Instituto de Física da Universidade de São Paulo (IFUSP)
+  periodo: 2026-Atual
+  descricao: Descrições Efetivas de Baixas Energias e Fluxos do Grupo de Renormalização em Mecânica Quântica
+  titulo_en: Undergraduate Research
+  titulo_es: Iniciación científica
+  local_en: Institute of Physics, University of São Paulo (IFUSP)
+  local_es: Instituto de Física de la Universidad de São Paulo (IFUSP)
+  periodo_en: 2026-Present
+  periodo_es: 2026-Actual
+  descricao_en: Low-Energy Effective Descriptions and Renormalization Group Flows in Quantum Mechanics
+  descricao_es: Descripciones Efectivas de Bajas Energías y Flujos del Grupo de Renormalización en Mecánica
+    Cuántica

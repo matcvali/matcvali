@@ -1,19 +1,21 @@
 ---
 // Apresentação da primeira visita: boas-vindas, escolha de idioma e escolha de tema.
 // Aparece uma única vez por navegador (fica salvo no localStorage).
-import type { Lang } from '../i18n/ui';
+import { t, langs, type Lang } from '../i18n/ui';
 interface Props { lang: Lang; nome: string }
 const { lang, nome } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const chaves = ['ola', 'tema_titulo', 'tema_nota', 'claro', 'escuro', 'pular'];
+const TEXTOS = Object.fromEntries(langs.map((l) => [l, Object.fromEntries(chaves.map((c) => [c, t(l, `bv.${c}`)]))]));
 ---
-<div class="bv" id="bv" tabindex="-1" role="dialog" aria-modal="true" aria-label="Bem-vindo" data-lang={lang} data-base={base}>
+<div class="bv" id="bv" tabindex="-1" role="dialog" aria-modal="true" aria-label={t(lang, 'bv.rotulo')} data-lang={lang} data-base={base}>
   <div class="bv-aura" aria-hidden="true"><i></i><i></i><i></i></div>
 
-  <button type="button" class="bv-pular" data-t="pular">Pular</button>
+  <button type="button" class="bv-pular" data-t="pular">{t(lang, 'bv.pular')}</button>
 
   <!-- 1. Boas-vindas -->
   <section class="bv-etapa" data-etapa="ola">
-    <h1 class="bv-ola" data-t="ola">Bem-vindo ao meu portfólio</h1>
+    <h1 class="bv-ola" data-t="ola">{t(lang, 'bv.ola')}</h1>
     <p class="bv-nome">{nome}</p>
   </section>
 
@@ -32,9 +34,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       </g>
     </svg>
     <div class="bv-ciclo" aria-live="polite">
-      <div class="bv-frase" lang="pt"><h2>Escolha o idioma</h2><p>Dá para mudar depois, no topo da página.</p></div>
-      <div class="bv-frase" lang="en"><h2>Choose your language</h2><p>You can change it later at the top of the page.</p></div>
-      <div class="bv-frase" lang="es"><h2>Elige tu idioma</h2><p>Puedes cambiarlo después, arriba en la página.</p></div>
+      {langs.map((l) => (
+        <div class="bv-frase" lang={l}><h2>{t(l, 'bv.idioma_titulo')}</h2><p>{t(l, 'bv.idioma_nota')}</p></div>
+      ))}
     </div>
     <div class="bv-opcoes">
       <button type="button" class="bv-op" data-idioma="pt" lang="pt">
@@ -86,32 +88,27 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <!-- 3. Tema -->
   <section class="bv-etapa" data-etapa="tema">
-    <h2 class="bv-titulo" data-t="temaTitulo">Claro ou escuro?</h2>
-    <p class="bv-nota" data-t="temaNota">Também dá para trocar depois, no botão do topo.</p>
+    <h2 class="bv-titulo" data-t="tema_titulo">{t(lang, 'bv.tema_titulo')}</h2>
+    <p class="bv-nota" data-t="tema_nota">{t(lang, 'bv.tema_nota')}</p>
     <div class="bv-opcoes bv-temas">
       <button type="button" class="bv-tema" data-tema="light">
         <span class="bv-previa claro" aria-hidden="true"><i></i><i></i><b></b><b></b><b></b></span>
-        <span data-t="claro">Claro</span>
+        <span data-t="claro">{t(lang, 'bv.claro')}</span>
       </button>
       <button type="button" class="bv-tema" data-tema="dark">
         <span class="bv-previa escuro" aria-hidden="true"><i></i><i></i><b></b><b></b><b></b></span>
-        <span data-t="escuro">Escuro</span>
+        <span data-t="escuro">{t(lang, 'bv.escuro')}</span>
       </button>
     </div>
   </section>
 </div>
 
-<script is:inline>
+<script is:inline define:vars={{ TEXTOS }}>
 (() => {
   const root = document.documentElement;
   const bv = document.getElementById('bv');
   if (!bv || !root.dataset.bv) return;
 
-  const TEXTOS = {
-    pt: { ola: 'Bem-vindo ao meu portfólio', temaTitulo: 'Claro ou escuro?', temaNota: 'Também dá para trocar depois, no botão do topo.', claro: 'Claro', escuro: 'Escuro', pular: 'Pular' },
-    en: { ola: 'Welcome to my portfolio', temaTitulo: 'Light or dark?', temaNota: 'You can switch later with the button at the top.', claro: 'Light', escuro: 'Dark', pular: 'Skip' },
-    es: { ola: 'Bienvenido a mi portafolio', temaTitulo: '¿Claro u oscuro?', temaNota: 'También puedes cambiarlo después con el botón de arriba.', claro: 'Claro', escuro: 'Oscuro', pular: 'Saltar' },
-  };
   const langPagina = bv.dataset.lang;
   const base = bv.dataset.base || '';
   const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
