@@ -1,0 +1,52 @@
+---
+// Cartão de uma história: capa (ou ilustração), título e resumo.
+import Ilustracao from './Ilustracao.astro';
+import { t, type Lang } from '../i18n/ui';
+import { url, campo } from '../lib/util';
+interface Props { historia: any; lang: Lang }
+const { historia, lang } = Astro.props;
+const d = historia.data;
+const resumo = campo(d, 'resumo', lang);
+---
+<a class="card vidro" href={url(`/${lang}/historias/${historia.id}/`)}>
+  <span class="capa">
+    {d.capa ? <img src={url(d.capa)} alt="" loading="lazy" /> : <Ilustracao semente={historia.id} class="ilu" />}
+  </span>
+  <span class="corpo">
+    <span class="titulo">{campo(d, 'titulo', lang)}</span>
+    {resumo && <span class="resumo">{resumo}</span>}
+    <span class="ler">{t(lang, 'hist.ler')}</span>
+  </span>
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.35s cubic-bezier(.3,1.4,.6,1), background 0.25s;
+  }
+  .card:hover { transform: translateY(-4px); background: var(--surface-2); color: var(--ink); }
+  .capa {
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: calc(var(--r-lg) - 8px);
+    overflow: hidden;
+    background: var(--surface-2);
+  }
+  .capa img, .capa :global(.ilu) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .card:hover .capa img, .card:hover .capa :global(.ilu) { transform: scale(1.04); }
+  .corpo { display: flex; flex-direction: column; gap: 6px; padding: 16px 12px 12px; flex: 1; }
+  .titulo { font-size: 1.2rem; font-weight: 700; line-height: 1.25; letter-spacing: -0.02em; }
+  .resumo { color: var(--muted); font-size: 0.95rem; line-height: 1.5; }
+  .ler { margin-top: auto; padding-top: 10px; font-weight: 650; font-size: 0.9rem; color: var(--orange-ink); }
+</style>

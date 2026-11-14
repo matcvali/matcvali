@@ -1,0 +1,83 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Ilustracao from '../../../components/Ilustracao.astro';
+import HistoriaCard from '../../../components/HistoriaCard.astro';
+import { langs, t, type Lang } from '../../../i18n/ui';
+import { url, campo, markdown } from '../../../lib/util';
+
+export async function getStaticPaths() {
+  const lista = (await getCollection('historias')).filter((h) => !h.data.rascunho);
+  return langs.flatMap((lang) =>
+    lista.map((historia) => ({ params: { lang, historia: historia.id }, props: { historia, lista } })),
+  );
+}
+
+const lang = Astro.params.lang as Lang;
+const { historia, lista } = Astro.props;
+const d = historia.data;
+const traduzido = lang !== 'pt' ? (d as any)[`texto_${lang}`] : null;
+const outras = lista
+  .filter((h: any) => h.id !== historia.id)
+  .sort((a: any, b: any) => a.data.ordem - b.data.ordem)
+  .slice(0, 3);
+---
+<Base lang={lang} titulo={campo(d, 'titulo', lang)} descricao={campo(d, 'resumo', lang)}>
+  <article class="wrap historia">
+    <a class="voltar" href={url(`/${lang}/`)}>← {t(lang, 'hist.voltar')}</a>
+
+    <div class="capa vidro">
+      {d.capa ? <img src={url(d.capa)} alt="" /> : <Ilustracao semente={historia.id} class="ilu" />}
+    </div>
+
+    <header>
+      <h1>{campo(d, 'titulo', lang)}</h1>
+      {campo(d, 'resumo', lang) && <p class="lede">{campo(d, 'resumo', lang)}</p>}
+    </header>
+
+    {traduzido
+      ? <div class="prose" set:html={markdown(traduzido)} />
+      : (
+        <>
+          {lang !== 'pt' && <p class="aviso">{t(lang, 'geral.traducao')}</p>}
+          <div class="prose" set:html={markdown(historia.body || '')} />
+        </>
+      )}
+  </article>
+
+  {outras.length > 0 && (
+    <section class="wrap outras">
+      <h2>{t(lang, 'hist.outras')}</h2>
+      <div class="grade">
+        {outras.map((h: any) => <HistoriaCard historia={h} lang={lang} />)}
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .historia { padding-top: 40px; max-width: 820px; }
+  .capa {
+    aspect-ratio: 16 / 8;
+    padding: 8px;
+    margin-bottom: 36px;
+  }
+  .capa img, .capa :global(.ilu) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: calc(var(--r-lg) - 6px);
+  }
+  header { margin-bottom: 32px; }
+  header h1 { font-size: clamp(2rem, 5vw, 3rem); }
+  .aviso { margin-bottom: 24px; }
+  .prose :global(img) { margin: 1.4em 0; width: 100%; height: auto; }
+  .prose :global(p), .prose :global(li) { line-height: 1.75; }
+
+  .outras { margin-top: 72px; max-width: 820px; }
+  .outras h2 { font-size: 1.4rem; margin-bottom: 20px; }
+  .grade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .grade { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .grade { grid-template-columns: 1fr; } }
+</style>

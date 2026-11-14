@@ -88,4 +88,22 @@ const sobre = defineCollection({
   }),
 });
 
-export const collections = { livros, interesses, documentos, disciplinas, sobre };
+// Histórias da página inicial (textos tipo blog, com capa opcional).
+const historias = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/historias' }),
+  schema: z.object({
+    titulo: z.string(),
+    titulo_en: opcional,
+    titulo_es: opcional,
+    resumo: opcional,
+    resumo_en: opcional,
+    resumo_es: opcional,
+    capa: opcional,
+    ordem: z.coerce.number().default(10),
+    rascunho: z.boolean().nullable().optional(),
+    texto_en: opcional,
+    texto_es: opcional,
+  }),
+});
+
+export const collections = { livros, interesses, documentos, disciplinas, sobre, historias };

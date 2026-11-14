@@ -237,6 +237,31 @@ content:
       - { name: titulo_es, label: Título (espanhol), type: string }
       - { name: texto_es, label: Texto (espanhol), type: rich-text, options: { format: markdown } }
 
+  # ---------------- HISTÓRIAS DA PÁGINA INICIAL ----------------
+  - name: historias
+    label: Histórias da página inicial
+    type: collection
+    path: src/content/historias
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titulo, ordem, rascunho]
+      primary: titulo
+      sort: ordem
+    fields:
+      - { name: titulo, label: Título, type: string, required: true }
+      - { name: resumo, label: Resumo (aparece no cartão), type: text }
+      - { name: capa, label: Imagem de capa (opcional; sem ela o site desenha uma ilustração), type: image, options: { media: imagens } }
+      - { name: ordem, label: Ordem na página inicial, type: number, default: 10 }
+      - { name: rascunho, label: Rascunho (não aparece no site), type: boolean, default: false }
+      - { name: body, label: Texto (aceita imagens no meio), type: rich-text, options: { format: markdown } }
+      - { name: titulo_en, label: Título (inglês), type: string }
+      - { name: resumo_en, label: Resumo (inglês), type: text }
+      - { name: texto_en, label: Texto (inglês), type: rich-text, options: { format: markdown } }
+      - { name: titulo_es, label: Título (espanhol), type: string }
+      - { name: resumo_es, label: Resumo (espanhol), type: text }
+      - { name: texto_es, label: Texto (espanhol), type: rich-text, options: { format: markdown } }
+
   # ---------------- TEXTOS DO SITE ----------------
   - name: textos
     label: Textos do site (menus, títulos e botões)
@@ -860,6 +885,38 @@ content:
               - { name: es, label: Espanhol, type: string }
           - name: link
             label: "Como este site foi feito"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+      - name: hist
+        label: Histórias (página inicial)
+        type: object
+        fields:
+          - name: secao
+            label: "Um pouco sobre mim"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: ler
+            label: "Ler história"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: voltar
+            label: "Voltar para o início"
+            type: object
+            fields:
+              - { name: pt, label: Português, type: string }
+              - { name: en, label: Inglês, type: string }
+              - { name: es, label: Espanhol, type: string }
+          - name: outras
+            label: "Outras histórias"
             type: object
             fields:
               - { name: pt, label: Português, type: string }

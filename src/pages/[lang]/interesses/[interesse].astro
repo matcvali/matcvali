@@ -1,5 +1,5 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { getCollection } from 'astro:content';
 import Base from '../../../layouts/Base.astro';
 import { langs, t, type Lang } from '../../../i18n/ui';
 import { url, campo, markdown } from '../../../lib/util';
@@ -13,7 +13,6 @@ export async function getStaticPaths() {
 const lang = Astro.params.lang as Lang;
 const { item } = Astro.props;
 const d = item.data;
-const { Content } = await render(item);
 const traduzido = lang !== 'pt' ? (d as any)[`texto_${lang}`] : null;
 ---
 <Base lang={lang} titulo={campo(d, 'titulo', lang)} descricao={campo(d, 'resumo', lang)}>
@@ -30,7 +29,7 @@ const traduzido = lang !== 'pt' ? (d as any)[`texto_${lang}`] : null;
       : (
         <>
           {lang !== 'pt' && <p class="aviso">{t(lang, 'geral.traducao')}</p>}
-          <div class="prose"><Content /></div>
+          <div class="prose" set:html={markdown(item.body || '')} />
         </>
       )}
   </article>

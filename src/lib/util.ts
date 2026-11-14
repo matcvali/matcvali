@@ -59,7 +59,11 @@ export function normalizar(texto: string): string {
 
 /** Converte o texto das traduções (Markdown ou HTML do painel) em HTML. */
 export function markdown(texto: string): string {
-  return marked.parse(texto || '', { async: false }) as string;
+  const html = marked.parse(texto || '', { async: false }) as string;
+  // Imagens e links enviados pelo painel começam com "/" (ex.: /imagens/foto.png).
+  // Aqui eles ganham o endereço base do site, para funcionar em qualquer pasta.
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return html.replace(/((?:src|href)=")\/(?!\/)/g, `$1${base}/`);
 }
 
 /** Converte texto simples (com linhas em branco) em parágrafos HTML seguros. */

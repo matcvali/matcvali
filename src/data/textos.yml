@@ -344,3 +344,20 @@ sobre:
     pt: Como este site foi feito
     en: How this site was made
     es: Cómo se hizo este sitio
+hist:
+  secao:
+    pt: Um pouco sobre mim
+    en: A bit about me
+    es: Un poco sobre mí
+  ler:
+    pt: Ler história
+    en: Read story
+    es: Leer historia
+  voltar:
+    pt: Voltar para o início
+    en: Back to home
+    es: Volver al inicio
+  outras:
+    pt: Outras histórias
+    en: More stories
+    es: Otras historias
