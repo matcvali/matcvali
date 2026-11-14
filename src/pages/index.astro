@@ -1,6 +1,8 @@
 ---
-import { url } from '../lib/util';
-const destinos = { pt: url('/pt/'), en: url('/en/'), es: url('/es/') };
+import { perfil } from '../lib/util';
+const nome = perfil().nome;
+// Endereços relativos: funcionam no site publicado e em qualquer pasta.
+const destinos = { pt: './pt/', en: './en/', es: './es/' };
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -8,7 +10,7 @@ const destinos = { pt: url('/pt/'), en: url('/en/'), es: url('/es/') };
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="refresh" content={`1; url=${destinos.pt}`} />
-    <title>Redirecionando</title>
+    <title>{nome}</title>
     <style is:inline>
       html { background: #fbf8ff; }
       @media (prefers-color-scheme: dark) { html:not([data-theme='light']) { background: #0e0b1d; } }

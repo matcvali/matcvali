@@ -170,8 +170,8 @@ const TEXTOS = Object.fromEntries(langs.map((l) => [l, Object.fromEntries(chaves
     if (idioma !== langPagina) {
       // Troca de página por trás da tela de apresentação; a página nova continua a saída.
       try { sessionStorage.setItem('bv-saida', '1'); } catch (e) {}
-      const resto = location.pathname.slice(base.length).replace(/^\/(pt|en|es)(?=\/|$)/, '');
-      location.href = `${base}/${idioma}${resto || '/'}${location.search}${location.hash}`;
+      // Troca só o trecho do idioma no endereço (/pt/ vira /es/, por exemplo).
+      location.href = location.href.replace(/\/(pt|en|es)\//, `/${idioma}/`);
       return;
     }
     desfazer();
