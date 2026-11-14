@@ -182,12 +182,32 @@ const TEXTOS = Object.fromEntries(langs.map((l) => [l, Object.fromEntries(chaves
     setTimeout(() => {
       delete root.dataset.bv;
       bv.remove();
-    }, calmo ? 200 : 1100);
+    }, calmo ? 200 : bv.classList.contains('rapido') ? 750 : 1100);
   }
 
   // Página aberta logo depois da troca de idioma: só termina a saída.
   if (root.dataset.bv === 'saida') {
     requestAnimationFrame(() => setTimeout(desfazer, 250));
+    return;
+  }
+
+  // Visitas seguintes: só as boas-vindas, mais rápidas, no idioma da página.
+  if (root.dataset.bv === 'rapido') {
+    traduzir(langPagina);
+    bv.classList.add('rapido');
+    let saiu = false;
+    const terminar = async () => {
+      if (saiu) return;
+      saiu = true;
+      await mostrar(null);
+      desfazer();
+    };
+    bv.addEventListener('click', terminar);
+    bv.addEventListener('keydown', (e) => { if (e.key === 'Escape') terminar(); });
+    requestAnimationFrame(() => {
+      mostrar('ola');
+      setTimeout(terminar, calmo ? 700 : 1700);
+    });
     return;
   }
 
@@ -249,6 +269,10 @@ const TEXTOS = Object.fromEntries(langs.map((l) => [l, Object.fromEntries(chaves
   :global(html[data-bv]) .bv { display: grid; }
   :global(html[data-bv]) body { overflow: hidden; }
   .bv.some { opacity: 0; filter: blur(12px); transform: scale(1.04); pointer-events: none; }
+  .bv.rapido { cursor: pointer; }
+  .bv.rapido .bv-pular { display: none; }
+  .bv.rapido .bv-etapa { transition-duration: 0.55s; }
+  .bv.rapido.some { transition-duration: 0.7s; }
 
   .bv-aura { position: absolute; inset: 0; }
   .bv-aura i {

@@ -46,7 +46,7 @@ const ano = new Date().getFullYear();
       try {
         const t = localStorage.getItem('tema');
         if (t) document.documentElement.dataset.theme = t;
-        // Apresentação da primeira visita (ou o fim dela, logo após trocar de idioma).
+        // Apresentação: completa na primeira visita; só as boas-vindas nas seguintes.
         if (sessionStorage.getItem('bv-saida')) {
           sessionStorage.removeItem('bv-saida');
           document.documentElement.dataset.bv = 'saida';
@@ -54,6 +54,11 @@ const ano = new Date().getFullYear();
           localStorage.setItem('bv-teste', '1');
           localStorage.removeItem('bv-teste');
           document.documentElement.dataset.bv = 'inicio';
+          sessionStorage.setItem('bv-sessao', '1');
+        } else if (!sessionStorage.getItem('bv-sessao')) {
+          // Visitas seguintes: só as boas-vindas, uma vez por sessão do navegador.
+          sessionStorage.setItem('bv-sessao', '1');
+          document.documentElement.dataset.bv = 'rapido';
         }
       } catch (e) {}
     </script>
