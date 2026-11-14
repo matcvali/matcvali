@@ -1,0 +1,401 @@
+---
+// Apresentação da primeira visita: boas-vindas, escolha de idioma e escolha de tema.
+// Aparece uma única vez por navegador (fica salvo no localStorage).
+import type { Lang } from '../i18n/ui';
+interface Props { lang: Lang; nome: string }
+const { lang, nome } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<div class="bv" id="bv" tabindex="-1" role="dialog" aria-modal="true" aria-label="Bem-vindo" data-lang={lang} data-base={base}>
+  <div class="bv-aura" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <button type="button" class="bv-pular" data-t="pular">Pular</button>
+
+  <!-- 1. Boas-vindas -->
+  <section class="bv-etapa" data-etapa="ola">
+    <h1 class="bv-ola" data-t="ola">Bem-vindo ao meu portfólio</h1>
+    <p class="bv-nome">{nome}</p>
+  </section>
+
+  <!-- 2. Idioma -->
+  <section class="bv-etapa" data-etapa="idioma">
+    <svg class="bv-globo" viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <linearGradient id="bvg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="var(--orange)" /><stop offset="1" stop-color="var(--lilac)" />
+        </linearGradient>
+      </defs>
+      <g fill="none" stroke="url(#bvg)" stroke-width="3" stroke-linecap="round">
+        <circle cx="32" cy="32" r="24" />
+        <ellipse cx="32" cy="32" rx="10" ry="24" />
+        <path d="M9 24h46M9 40h46" />
+      </g>
+    </svg>
+    <div class="bv-ciclo" aria-live="polite">
+      <div class="bv-frase" lang="pt"><h2>Escolha o idioma</h2><p>Dá para mudar depois, no topo da página.</p></div>
+      <div class="bv-frase" lang="en"><h2>Choose your language</h2><p>You can change it later at the top of the page.</p></div>
+      <div class="bv-frase" lang="es"><h2>Elige tu idioma</h2><p>Puedes cambiarlo después, arriba en la página.</p></div>
+    </div>
+    <div class="bv-opcoes">
+      <button type="button" class="bv-op" data-idioma="pt" lang="pt">
+        <svg class="bv-bandeira" viewBox="0 0 40 40" aria-hidden="true">
+          <clipPath id="cbr"><circle cx="20" cy="20" r="20" /></clipPath>
+          <g clip-path="url(#cbr)">
+            <rect width="40" height="40" fill="#009b3a" />
+            <path d="M20 7 36 20 20 33 4 20Z" fill="#fedf00" />
+            <circle cx="20" cy="20" r="7.5" fill="#002776" />
+            <path d="M12.8 18.6c4.8-1.2 9.8-.6 14.3 1.8" stroke="#fff" stroke-width="1.6" fill="none" />
+          </g>
+        </svg>
+        <span>Português</span>
+      </button>
+      <button type="button" class="bv-op" data-idioma="en" lang="en">
+        <svg class="bv-bandeira" viewBox="0 0 40 40" aria-hidden="true">
+          <clipPath id="cus"><circle cx="20" cy="20" r="20" /></clipPath>
+          <g clip-path="url(#cus)">
+            <rect width="40" height="40" fill="#fff" />
+            <g fill="#b22234">
+              <rect y="0" width="40" height="3.08" /><rect y="6.15" width="40" height="3.08" /><rect y="12.3" width="40" height="3.08" />
+              <rect y="18.46" width="40" height="3.08" /><rect y="24.6" width="40" height="3.08" /><rect y="30.77" width="40" height="3.08" />
+              <rect y="36.92" width="40" height="3.08" />
+            </g>
+            <rect width="19" height="21.5" fill="#3c3b6e" />
+            <g fill="#fff">
+              <circle cx="4" cy="4" r="1" /><circle cx="9.5" cy="4" r="1" /><circle cx="15" cy="4" r="1" />
+              <circle cx="6.7" cy="8.5" r="1" /><circle cx="12.2" cy="8.5" r="1" />
+              <circle cx="4" cy="13" r="1" /><circle cx="9.5" cy="13" r="1" /><circle cx="15" cy="13" r="1" />
+              <circle cx="6.7" cy="17.5" r="1" /><circle cx="12.2" cy="17.5" r="1" />
+            </g>
+          </g>
+        </svg>
+        <span>English</span>
+      </button>
+      <button type="button" class="bv-op" data-idioma="es" lang="es">
+        <svg class="bv-bandeira" viewBox="0 0 40 40" aria-hidden="true">
+          <clipPath id="ces"><circle cx="20" cy="20" r="20" /></clipPath>
+          <g clip-path="url(#ces)">
+            <rect width="40" height="40" fill="#c60b1e" />
+            <rect y="10" width="40" height="20" fill="#ffc400" />
+            <rect x="9" y="15" width="5" height="10" rx="1.5" fill="#c60b1e" opacity=".85" />
+          </g>
+        </svg>
+        <span>Español</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 3. Tema -->
+  <section class="bv-etapa" data-etapa="tema">
+    <h2 class="bv-titulo" data-t="temaTitulo">Claro ou escuro?</h2>
+    <p class="bv-nota" data-t="temaNota">Também dá para trocar depois, no botão do topo.</p>
+    <div class="bv-opcoes bv-temas">
+      <button type="button" class="bv-tema" data-tema="light">
+        <span class="bv-previa claro" aria-hidden="true"><i></i><i></i><b></b><b></b><b></b></span>
+        <span data-t="claro">Claro</span>
+      </button>
+      <button type="button" class="bv-tema" data-tema="dark">
+        <span class="bv-previa escuro" aria-hidden="true"><i></i><i></i><b></b><b></b><b></b></span>
+        <span data-t="escuro">Escuro</span>
+      </button>
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+(() => {
+  const root = document.documentElement;
+  const bv = document.getElementById('bv');
+  if (!bv || !root.dataset.bv) return;
+
+  const TEXTOS = {
+    pt: { ola: 'Bem-vindo ao meu portfólio', temaTitulo: 'Claro ou escuro?', temaNota: 'Também dá para trocar depois, no botão do topo.', claro: 'Claro', escuro: 'Escuro', pular: 'Pular' },
+    en: { ola: 'Welcome to my portfolio', temaTitulo: 'Light or dark?', temaNota: 'You can switch later with the button at the top.', claro: 'Light', escuro: 'Dark', pular: 'Skip' },
+    es: { ola: 'Bienvenido a mi portafolio', temaTitulo: '¿Claro u oscuro?', temaNota: 'También puedes cambiarlo después con el botón de arriba.', claro: 'Claro', escuro: 'Oscuro', pular: 'Saltar' },
+  };
+  const langPagina = bv.dataset.lang;
+  const base = bv.dataset.base || '';
+  const calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const esperar = (ms) => new Promise((r) => setTimeout(r, calmo ? Math.min(ms, 150) : ms));
+
+  const palpite = (navigator.language || 'pt').slice(0, 2);
+  let idioma = TEXTOS[palpite] ? palpite : langPagina;
+
+  function traduzir(l) {
+    bv.querySelectorAll('[data-t]').forEach((el) => { el.textContent = TEXTOS[l][el.dataset.t]; });
+    bv.setAttribute('lang', l);
+  }
+
+  const etapas = {};
+  bv.querySelectorAll('.bv-etapa').forEach((e) => (etapas[e.dataset.etapa] = e));
+  let atual = null;
+
+  async function mostrar(nome) {
+    if (atual) {
+      atual.classList.remove('ativa');
+      atual.classList.add('saindo');
+      const velha = atual;
+      setTimeout(() => velha.classList.remove('saindo'), 900);
+      await esperar(450);
+    }
+    atual = nome ? etapas[nome] : null;
+    if (atual) {
+      atual.classList.add('ativa');
+    }
+  }
+
+  // Alterna o título da escolha de idioma entre as três línguas, uma por vez.
+  let cicloTimer;
+  function ciclo() {
+    const frases = [...bv.querySelectorAll('.bv-frase')];
+    let i = Math.max(0, frases.findIndex((f) => f.lang === idioma));
+    frases.forEach((f, k) => f.classList.toggle('visivel', k === i));
+    cicloTimer = setInterval(() => {
+      frases[i].classList.remove('visivel');
+      i = (i + 1) % frases.length;
+      frases[i].classList.add('visivel');
+    }, 2600);
+  }
+
+  function salvar(chave, valor) { try { localStorage.setItem(chave, valor); } catch (e) {} }
+
+  function trocarTema(tema) {
+    const aplicar = () => { root.dataset.theme = tema; };
+    if (document.startViewTransition && !calmo) document.startViewTransition(aplicar);
+    else aplicar();
+    salvar('tema', tema);
+  }
+
+  async function sair() {
+    clearInterval(cicloTimer);
+    salvar('bv', '1');
+    salvar('idioma', idioma);
+    await mostrar(null);
+    if (idioma !== langPagina) {
+      // Troca de página por trás da tela de apresentação; a página nova continua a saída.
+      try { sessionStorage.setItem('bv-saida', '1'); } catch (e) {}
+      const resto = location.pathname.slice(base.length).replace(/^\/(pt|en|es)(?=\/|$)/, '');
+      location.href = `${base}/${idioma}${resto || '/'}${location.search}${location.hash}`;
+      return;
+    }
+    desfazer();
+  }
+
+  function desfazer() {
+    bv.classList.add('some');
+    setTimeout(() => {
+      delete root.dataset.bv;
+      bv.remove();
+    }, calmo ? 200 : 1100);
+  }
+
+  // Página aberta logo depois da troca de idioma: só termina a saída.
+  if (root.dataset.bv === 'saida') {
+    requestAnimationFrame(() => setTimeout(desfazer, 250));
+    return;
+  }
+
+  traduzir(idioma);
+
+  bv.querySelectorAll('[data-idioma]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      idioma = b.dataset.idioma;
+      bv.querySelectorAll('[data-idioma]').forEach((x) => x.classList.toggle('escolhido', x === b));
+      await esperar(350);
+      clearInterval(cicloTimer);
+      traduzir(idioma);
+      mostrar('tema');
+    }),
+  );
+
+  bv.querySelectorAll('[data-tema]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      bv.querySelectorAll('[data-tema]').forEach((x) => x.classList.toggle('escolhido', x === b));
+      trocarTema(b.dataset.tema);
+      await esperar(900);
+      sair();
+    }),
+  );
+
+  bv.querySelector('.bv-pular').addEventListener('click', sair);
+  bv.addEventListener('keydown', (e) => { if (e.key === 'Escape') sair(); });
+
+  // Sequência: boas-vindas, depois idioma (clicar adianta).
+  let avancou = false;
+  const irParaIdioma = () => {
+    if (avancou) return;
+    avancou = true;
+    mostrar('idioma');
+    ciclo();
+  };
+  etapas.ola.addEventListener('click', irParaIdioma);
+  requestAnimationFrame(() => {
+    bv.focus({ preventScroll: true });
+    mostrar('ola');
+    setTimeout(irParaIdioma, calmo ? 1200 : 3000);
+  });
+})();
+</script>
+
+<style>
+  .bv {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    place-items: center;
+    background: var(--bg);
+    color: var(--ink);
+    overflow: clip;
+    outline: none;
+    transition: opacity 1s ease, filter 1s ease, transform 1s ease;
+  }
+  :global(html[data-bv]) .bv { display: grid; }
+  :global(html[data-bv]) body { overflow: hidden; }
+  .bv.some { opacity: 0; filter: blur(12px); transform: scale(1.04); pointer-events: none; }
+
+  .bv-aura { position: absolute; inset: 0; }
+  .bv-aura i {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: var(--blob-op);
+    animation: deriva 14s ease-in-out infinite alternate;
+  }
+  .bv-aura i:nth-child(1) { width: 60vmax; height: 60vmax; background: var(--blob-1); left: -20vmax; top: -25vmax; }
+  .bv-aura i:nth-child(2) { width: 55vmax; height: 55vmax; background: var(--blob-2); right: -20vmax; top: -5vmax; animation-delay: -5s; }
+  .bv-aura i:nth-child(3) { width: 50vmax; height: 50vmax; background: var(--blob-3); left: 25vmax; bottom: -30vmax; opacity: calc(var(--blob-op) * 0.6); animation-delay: -9s; }
+  @keyframes deriva {
+    to { transform: translate(6vmax, 4vmax) scale(1.12); }
+  }
+
+  .bv-pular {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-pill);
+    padding: 7px 16px;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+  }
+  .bv-pular:hover { color: var(--ink); }
+
+  .bv-etapa {
+    grid-area: 1 / 1;
+    position: relative;
+    z-index: 1;
+    width: min(680px, 100% - 40px);
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(18px) scale(0.98);
+    filter: blur(10px);
+    transition: opacity 0.8s cubic-bezier(.2,.7,.2,1), transform 0.8s cubic-bezier(.2,.7,.2,1), filter 0.8s ease, visibility 0s 0.8s;
+  }
+  .bv-etapa.ativa {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    filter: none;
+    transition-delay: 0s;
+  }
+  .bv-etapa.saindo { transform: translateY(-18px) scale(0.98); }
+
+  .bv-ola {
+    font-size: clamp(2.2rem, 7vw, 4.4rem);
+    line-height: 1.05;
+    letter-spacing: -0.045em;
+    margin: 0 0 16px;
+    background: linear-gradient(100deg, var(--ink) 30%, var(--orange-ink) 65%, var(--lilac));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .bv-etapa[data-etapa='ola'] { cursor: pointer; }
+  .bv-nome { color: var(--muted); font-size: 1.1rem; margin: 0; }
+
+  .bv-globo { width: 64px; height: 64px; margin-bottom: 18px; animation: gira 18s linear infinite; }
+  @keyframes gira { to { transform: rotate(360deg); } }
+
+  .bv-ciclo { display: grid; margin-bottom: 30px; }
+  .bv-frase {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(6px);
+    transition: opacity 0.9s ease, transform 0.9s ease, filter 0.9s ease;
+  }
+  .bv-frase.visivel { opacity: 1; transform: none; filter: none; }
+  .bv-frase h2, .bv-titulo { font-size: clamp(1.8rem, 5vw, 2.6rem); margin: 0 0 8px; }
+  .bv-frase p, .bv-nota { color: var(--muted); margin: 0; }
+  .bv-nota { margin-bottom: 30px; }
+
+  .bv-opcoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; }
+  .bv-op, .bv-tema {
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 26px 18px;
+    min-width: 150px;
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    font-weight: 650;
+    transition: transform 0.35s cubic-bezier(.3,1.4,.6,1), background 0.3s, box-shadow 0.3s;
+  }
+  .bv-op:hover, .bv-tema:hover { transform: translateY(-4px); background: var(--surface-2); }
+  .bv-op.escolhido, .bv-tema.escolhido {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 0 0 2px var(--orange), var(--shadow);
+  }
+  .bv-bandeira { width: 56px; height: 56px; border-radius: 50%; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+
+  .bv-tema { min-width: 200px; }
+  .bv-previa {
+    position: relative;
+    width: 170px;
+    height: 106px;
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 5px;
+    padding: 12px;
+  }
+  .bv-previa i { position: absolute; width: 90px; height: 90px; border-radius: 50%; filter: blur(22px); }
+  .bv-previa i:nth-child(1) { left: -20px; top: -30px; }
+  .bv-previa i:nth-child(2) { right: -20px; top: -10px; }
+  .bv-previa b { position: relative; height: 8px; border-radius: 4px; }
+  .bv-previa b:nth-of-type(1) { width: 70%; height: 12px; }
+  .bv-previa b:nth-of-type(2) { width: 90%; }
+  .bv-previa b:nth-of-type(3) { width: 55%; }
+  .claro { background: #fbf8ff; box-shadow: inset 0 0 0 1px rgba(42,33,64,.08); }
+  .claro i:nth-child(1) { background: #ffc29a; } .claro i:nth-child(2) { background: #c9b8ff; }
+  .claro b { background: rgba(42,33,64,.18); } .claro b:nth-of-type(1) { background: #2a2140; }
+  .escuro { background: #0e0b1d; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .escuro i:nth-child(1) { background: #ff7a2f; opacity: .55; } .escuro i:nth-child(2) { background: #7c5cff; opacity: .65; }
+  .escuro b { background: rgba(255,255,255,.18); } .escuro b:nth-of-type(1) { background: #f3f0fb; }
+
+  @media (max-width: 560px) {
+    .bv-op { min-width: 0; flex: 1 1 30%; padding: 16px 10px; font-size: 0.9rem; }
+    .bv-bandeira { width: 46px; height: 46px; }
+    .bv-tema { min-width: 0; flex: 1 1 40%; padding: 14px; }
+    .bv-previa { width: 100%; height: 90px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bv-aura i, .bv-globo { animation: none; }
+  }
+</style>

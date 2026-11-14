@@ -3,6 +3,7 @@ import '@fontsource-variable/figtree';
 import '../styles/global.css';
 import { idiomas, langs, t, type Lang } from '../i18n/ui';
 import { url, perfil, campo } from '../lib/util';
+import BoasVindas from '../components/BoasVindas.astro';
 
 interface Props {
   lang: Lang;
@@ -45,11 +46,21 @@ const ano = new Date().getFullYear();
       try {
         const t = localStorage.getItem('tema');
         if (t) document.documentElement.dataset.theme = t;
+        // Apresentação da primeira visita (ou o fim dela, logo após trocar de idioma).
+        if (sessionStorage.getItem('bv-saida')) {
+          sessionStorage.removeItem('bv-saida');
+          document.documentElement.dataset.bv = 'saida';
+        } else if (!localStorage.getItem('bv')) {
+          localStorage.setItem('bv-teste', '1');
+          localStorage.removeItem('bv-teste');
+          document.documentElement.dataset.bv = 'inicio';
+        }
       } catch (e) {}
     </script>
   </head>
   <body>
     <div class="aura" aria-hidden="true"><i></i><i></i><i></i></div>
+    <BoasVindas lang={lang} nome={p.nome} />
     <a class="sr-only" href="#conteudo">{t(lang, 'geral.pular')}</a>
 
     <header class="topo">
@@ -120,9 +131,21 @@ const ano = new Date().getFullYear();
           root.dataset.theme === 'dark' ||
           (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
         const novo = escuroAgora ? 'light' : 'dark';
-        root.dataset.theme = novo;
+        const aplicar = () => { root.dataset.theme = novo; };
+        // Transição suave entre os temas, onde o navegador permite.
+        if (document.startViewTransition && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.startViewTransition(aplicar);
+        } else {
+          aplicar();
+        }
         try { localStorage.setItem('tema', novo); } catch (e) {}
       });
+      // Guarda o idioma escolhido no menu, para a próxima visita abrir nele.
+      document.querySelectorAll('.idiomas a').forEach((a) =>
+        a.addEventListener('click', () => {
+          try { localStorage.setItem('idioma', a.getAttribute('hreflang')); } catch (e) {}
+        }),
+      );
     </script>
   </body>
 </html>
