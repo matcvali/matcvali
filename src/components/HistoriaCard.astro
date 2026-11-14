@@ -1,5 +1,5 @@
 ---
-// Cartão de uma história: capa (ou ilustração), título e resumo.
+// Cartão de uma história na página inicial. Ao clicar, abre a janela da história (Historias.astro).
 import Ilustracao from './Ilustracao.astro';
 import { t, type Lang } from '../i18n/ui';
 import { url, campo } from '../lib/util';
@@ -8,7 +8,7 @@ const { historia, lang } = Astro.props;
 const d = historia.data;
 const resumo = campo(d, 'resumo', lang);
 ---
-<a class="card vidro" href={url(`/${lang}/historias/${historia.id}/`)}>
+<button type="button" class="card vidro" data-abre={historia.id} aria-haspopup="dialog">
   <span class="capa">
     {d.capa ? <img src={url(d.capa)} alt="" loading="lazy" /> : <Ilustracao semente={historia.id} class="ilu" />}
   </span>
@@ -17,19 +17,22 @@ const resumo = campo(d, 'resumo', lang);
     {resumo && <span class="resumo">{resumo}</span>}
     <span class="ler">{t(lang, 'hist.ler')}</span>
   </span>
-</a>
+</button>
 
 <style>
   .card {
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
     display: flex;
     flex-direction: column;
+    width: 100%;
     height: 100%;
     padding: 10px;
     color: var(--ink);
-    text-decoration: none;
     transition: transform 0.35s cubic-bezier(.3,1.4,.6,1), background 0.25s;
   }
-  .card:hover { transform: translateY(-4px); background: var(--surface-2); color: var(--ink); }
+  .card:hover { transform: translateY(-4px); background: var(--surface-2); }
   .capa {
     display: block;
     aspect-ratio: 16 / 10;

@@ -30,5 +30,5 @@ export function t(lang: Lang, chave: string): string {
   const valores = textos()[grupo]?.[item];
   const v = valores?.[lang];
   if (v && String(v).trim()) return String(v);
-  return valores?.pt ? String(valores.pt) : chave;
+  return valores ? String(valores.pt ?? '') : chave;
 }

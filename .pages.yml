@@ -908,15 +908,8 @@ content:
               - { name: pt, label: Português, type: string }
               - { name: en, label: Inglês, type: string }
               - { name: es, label: Espanhol, type: string }
-          - name: voltar
-            label: "Voltar para o início"
-            type: object
-            fields:
-              - { name: pt, label: Português, type: string }
-              - { name: en, label: Inglês, type: string }
-              - { name: es, label: Espanhol, type: string }
-          - name: outras
-            label: "Outras histórias"
+          - name: fechar
+            label: "Fechar"
             type: object
             fields:
               - { name: pt, label: Português, type: string }

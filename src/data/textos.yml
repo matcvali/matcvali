@@ -353,11 +353,7 @@ hist:
     pt: Ler história
     en: Read story
     es: Leer historia
-  voltar:
-    pt: Voltar para o início
-    en: Back to home
-    es: Volver al inicio
-  outras:
-    pt: Outras histórias
-    en: More stories
-    es: Otras historias
+  fechar:
+    pt: Fechar
+    en: Close
+    es: Cerrar

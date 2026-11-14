@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import HistoriaCard from '../../components/HistoriaCard.astro';
+import Historias from '../../components/Historias.astro';
 import { t, type Lang } from '../../i18n/ui';
 import { url, campo, perfil, caminhosIdioma } from '../../lib/util';
 
@@ -63,14 +63,7 @@ const secoes = [
     </div>
   </section>
 
-  {historias.length > 0 && (
-    <section class="wrap historias" aria-labelledby="historias-titulo">
-      <h2 id="historias-titulo">{t(lang, 'hist.secao')}</h2>
-      <div class="grade-historias">
-        {historias.map((h) => <HistoriaCard historia={h} lang={lang} />)}
-      </div>
-    </section>
-  )}
+  {historias.length > 0 && <Historias historias={historias} lang={lang} />}
 
   <section class="wrap painel">
     {atual && (
@@ -164,14 +157,6 @@ const secoes = [
     backdrop-filter: blur(12px);
   }
   .secundario:hover { background: var(--surface-2); color: var(--ink); }
-
-  .historias { margin-bottom: 56px; }
-  .historias h2 { font-size: 1.5rem; margin-bottom: 18px; }
-  .grade-historias {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 16px;
-  }
 
   .painel {
     display: grid;
