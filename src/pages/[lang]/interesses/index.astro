@@ -7,11 +7,6 @@ import { url, campo, caminhosIdioma } from '../../../lib/util';
 export const getStaticPaths = caminhosIdioma;
 const lang = Astro.params.lang as Lang;
 const interesses = (await getCollection('interesses')).sort((a, b) => a.data.ordem - b.data.ordem);
-const formas = [
-  '62% 38% 54% 46% / 48% 58% 42% 52%',
-  '42% 58% 40% 60% / 58% 42% 58% 42%',
-  '54% 46% 62% 38% / 40% 52% 48% 60%',
-];
 ---
 <Base lang={lang} titulo={t(lang, 'int.titulo')} descricao={t(lang, 'int.intro')}>
   <div class="wrap">
@@ -24,7 +19,7 @@ const formas = [
       {interesses.map((it, i) => (
         <li>
           <a href={url(`/${lang}/interesses/${it.id}/`)}>
-            <span class="forma" style={`border-radius:${formas[i % formas.length]}`} aria-hidden="true"></span>
+            <span class="forma" aria-hidden="true"></span>
             <span class="corpo">
               <span class="nome">{campo(it.data, 'titulo', lang)}</span>
               <span class="resumo">{campo(it.data, 'resumo', lang)}</span>
@@ -47,17 +42,20 @@ const formas = [
     padding: 28px;
     border-radius: var(--r-lg);
     background: var(--surface);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
     color: var(--ink);
     text-decoration: none;
     transition: background 0.25s;
   }
   .lista a:hover { background: var(--surface-2); }
-  .forma { width: 46px; height: 46px; background: var(--orange); transition: transform 0.5s cubic-bezier(.3,1.5,.6,1); }
-  li:nth-child(3n + 2) .forma { background: var(--amber); }
-  li:nth-child(3n) .forma { background: var(--plum); }
-  .lista a:hover .forma { transform: rotate(40deg) scale(1.08); }
+  .forma { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--orange), var(--lilac)); transition: transform 0.4s; }
+  li:nth-child(3n + 2) .forma { background: linear-gradient(135deg, var(--lilac), var(--blob-3)); }
+  li:nth-child(3n) .forma { background: linear-gradient(135deg, var(--amber), var(--orange)); }
+  .lista a:hover .forma { transform: scale(1.1); }
   .corpo { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-  .nome { font-family: var(--font-display); font-variation-settings: 'SOFT' 100; font-size: 1.6rem; font-weight: 560; line-height: 1.15; }
+  .nome { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+    letter-spacing: -0.02em; line-height: 1.15; }
   .resumo { color: var(--muted); }
   .pill { align-self: flex-start; background: var(--bg); }
 </style>

@@ -8,12 +8,24 @@ export const getStaticPaths = caminhosIdioma;
 const lang = Astro.params.lang as Lang;
 const p = perfil();
 
-const livros = await getCollection('livros');
 const disciplinas = await getCollection('disciplinas');
-const interesses = await getCollection('interesses');
-const documentos = await getCollection('documentos');
 const concluidas = disciplinas.filter((d) => d.data.status === 'concluida').length;
 const totalDisc = disciplinas.filter((d) => d.data.status !== 'sonho').length;
+const pct = totalDisc ? Math.round((concluidas / totalDisc) * 100) : 0;
+const cursando = disciplinas.filter((d) => d.data.status === 'cursando');
+const objetivo = disciplinas.find((d) => d.data.status === 'sonho');
+const resumoCaminho =
+  `${concluidas} / ${totalDisc} ${t(lang, 'cam.progresso')}.` +
+  (objetivo
+    ? ` ${t(lang, 'inicio.objetivo')}: ${campo(objetivo.data, 'titulo', lang)}${objetivo.data.periodo ? `, ${objetivo.data.periodo}` : ''}.`
+    : '');
+
+// Pesquisa atual: a experiência cujo período diz "atual", "hoje" etc. Se nenhuma, a primeira.
+const experiencias = p.experiencias || [];
+const atual =
+  experiencias.find((e: any) => /atual|hoje|present|actual|andamento/i.test(String(e.periodo || ''))) ||
+  experiencias[0];
+const instituicao = p.formacao?.[0] ? campo(p.formacao[0], 'instituicao', lang) : '';
 
 const iniciais = (p.nome || '?')
   .split(' ')
@@ -23,156 +35,192 @@ const iniciais = (p.nome || '?')
   .join('');
 
 const secoes = [
-  { href: `/${lang}/biblioteca/`, nome: t(lang, 'nav.biblioteca'), texto: t(lang, 'inicio.biblioteca'), info: `${livros.length} ${t(lang, 'bib.livros')}` },
-  { href: `/${lang}/caminho/`, nome: t(lang, 'nav.caminho'), texto: t(lang, 'inicio.caminho'), info: `${concluidas}/${totalDisc}` },
-  { href: `/${lang}/interesses/`, nome: t(lang, 'nav.interesses'), texto: t(lang, 'inicio.interesses'), info: String(interesses.length) },
-  { href: `/${lang}/documentos/`, nome: t(lang, 'nav.documentos'), texto: t(lang, 'inicio.documentos'), info: `${documentos.length} PDF` },
-  { href: `/${lang}/curriculo/`, nome: t(lang, 'nav.curriculo'), texto: t(lang, 'inicio.curriculo'), info: 'Lattes' },
+  { href: `/${lang}/caminho/`, nome: t(lang, 'nav.caminho'), texto: t(lang, 'inicio.caminho') },
+  { href: `/${lang}/biblioteca/`, nome: t(lang, 'nav.biblioteca'), texto: t(lang, 'inicio.biblioteca') },
+  { href: `/${lang}/interesses/`, nome: t(lang, 'nav.interesses'), texto: t(lang, 'inicio.interesses') },
+  { href: `/${lang}/documentos/`, nome: t(lang, 'nav.documentos'), texto: t(lang, 'inicio.documentos') },
+  { href: `/${lang}/curriculo/`, nome: t(lang, 'nav.curriculo'), texto: t(lang, 'inicio.curriculo') },
 ];
 ---
 <Base lang={lang} descricao={campo(p, 'bio', lang)}>
   <section class="hero wrap">
-    <div class="hero-texto">
-      <h1>{p.nome}</h1>
-      <p class="hero-titulo">{campo(p, 'titulo', lang)}</p>
-      <p class="lede">{campo(p, 'bio', lang)}</p>
-      <div class="hero-links">
-        {p.email && <a class="botao" href={`mailto:${p.email}`}>{t(lang, 'geral.contato')}</a>}
-        {p.lattes && <a class="pill" href={p.lattes} target="_blank" rel="noopener">Lattes</a>}
-        {(p.links || []).map((l: any) => (
-          <a class="pill" href={l.url} target="_blank" rel="noopener">{campo(l, 'nome', lang)}</a>
-        ))}
-      </div>
+    <div class="foto">
+      {p.foto ? <img src={url(p.foto)} alt={p.nome} /> : <span class="iniciais" aria-hidden="true">{iniciais}</span>}
     </div>
-
-    <div class="hero-arte" aria-hidden={p.foto ? undefined : 'true'}>
-      <div class="blob blob-fundo"></div>
-      <div class:list={["blob", "blob-frente", { "com-foto": p.foto }]}>
-        {p.foto
-          ? <img src={url(p.foto)} alt={p.nome} />
-          : <span class="iniciais">{iniciais}</span>}
-      </div>
-    </div>
-  </section>
-
-  <section class="wrap explorar" aria-labelledby="explorar-titulo">
-    <h2 id="explorar-titulo">{t(lang, 'inicio.explore')}</h2>
-    <ul class="secoes">
-      {secoes.map((s) => (
-        <li>
-          <a href={url(s.href)}>
-            <span class="secao-nome">{s.nome}</span>
-            <span class="secao-texto">{s.texto}</span>
-            <span class="secao-info">{s.info}</span>
-          </a>
-        </li>
+    <h1>{p.nome}</h1>
+    <p class="cargo">{campo(p, 'titulo', lang)}{instituicao && <span>{instituicao}</span>}</p>
+    <p class="bio">{campo(p, 'bio', lang)}</p>
+    <div class="acoes">
+      {p.email && <a class="botao" href={`mailto:${p.email}`}>{t(lang, 'geral.contato')}</a>}
+      {p.lattes && <a class="secundario" href={p.lattes} target="_blank" rel="noopener">Lattes</a>}
+      {(p.links || []).map((l: any) => (
+        <a class="secundario" href={l.url} target="_blank" rel="noopener">{campo(l, 'nome', lang)}</a>
       ))}
-    </ul>
+    </div>
   </section>
+
+  <section class="wrap painel">
+    {atual && (
+      <article class="vidro cartao pesquisa">
+        <h2>{t(lang, 'inicio.pesquisa')}</h2>
+        <p class="destaque">{campo(atual, 'descricao', lang) || campo(atual, 'titulo', lang)}</p>
+        <p class="meta">
+          {[campo(atual, 'titulo', lang), campo(atual, 'local', lang), campo(atual, 'periodo', lang)].filter(Boolean).join(', ')}
+        </p>
+      </article>
+    )}
+
+    <article class="vidro cartao">
+      {cursando.length > 0 && (
+        <>
+          <h2>{t(lang, 'inicio.cursando')}</h2>
+          <ul class="chips">
+            {cursando.map((d) => <li>{campo(d.data, 'titulo', lang)}</li>)}
+          </ul>
+        </>
+      )}
+      <h2 class:list={{ espaco: cursando.length > 0 }}>{t(lang, 'nav.caminho')}</h2>
+      <div class="barra" role="progressbar" aria-valuenow={pct} aria-valuemin="0" aria-valuemax="100">
+        <i style={`width:${pct}%`}></i>
+      </div>
+      <p class="meta">{resumoCaminho}</p>
+    </article>
+  </section>
+
+  <nav class="wrap secoes" aria-label={t(lang, 'inicio.explore')}>
+    {secoes.map((s) => (
+      <a class="vidro" href={url(s.href)}>
+        <span class="secao-nome">{s.nome}</span>
+        <span class="secao-texto">{s.texto}</span>
+      </a>
+    ))}
+  </nav>
 </Base>
 
 <style>
   .hero {
-    display: grid;
-    grid-template-columns: 1.25fr 1fr;
-    gap: 40px;
-    align-items: center;
-    padding-block: clamp(48px, 9vw, 112px) clamp(40px, 7vw, 80px);
+    text-align: center;
+    padding-block: clamp(56px, 9vw, 96px) 48px;
   }
-  .hero h1 {
-    font-size: clamp(2.8rem, 7.5vw, 5.2rem);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
-    margin-bottom: 0.2em;
+  .foto {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    padding: 4px;
+    border-radius: 50%;
+    background: conic-gradient(from 200deg, var(--orange), var(--lilac), var(--orange));
   }
-  .hero-titulo {
-    font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 100;
-    font-style: italic;
-    font-size: 1.35rem;
-    color: var(--orange-ink);
-    margin-bottom: 1.2em;
-  }
-  .hero-links { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 28px; }
-  .hero-links .pill { text-decoration: none; padding: 0.55em 1.1em; font-size: 0.95rem; }
-  .hero-links .pill:hover { background: var(--surface-2); color: var(--ink); }
-
-  .hero-arte { position: relative; aspect-ratio: 1; max-width: 420px; width: 100%; justify-self: center; }
-  .blob { position: absolute; border-radius: 58% 42% 52% 48% / 46% 56% 44% 54%; }
-  .blob-fundo {
-    inset: 4% -2% -4% 6%;
-    background: var(--apricot);
-    animation: respirar 16s ease-in-out infinite alternate;
-  }
-  .blob-frente {
-    inset: 0 8% 8% 0;
-    background: var(--orange);
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    border-radius: 44% 56% 46% 54% / 55% 45% 55% 45%;
-    animation: respirar 16s ease-in-out infinite alternate-reverse;
-  }
-  /* Com foto: sem fundo laranja atrás (evita a borda serrilhada) e a forma é aplicada na própria imagem. */
-  .blob-frente.com-foto { background: transparent; overflow: visible; }
-  .blob-frente img {
+  .foto img, .iniciais {
     width: 100%;
     height: 100%;
+    border-radius: 50%;
     object-fit: cover;
-    border-radius: inherit;
-    backface-visibility: hidden;
+    border: 4px solid var(--bg);
   }
   .iniciais {
-    font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 100, 'WONK' 1, 'opsz' 144;
-    font-size: clamp(5rem, 14vw, 9rem);
-    font-weight: 500;
-    color: var(--bg);
-    letter-spacing: -0.03em;
+    display: grid;
+    place-items: center;
+    background: var(--bg);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--ink);
   }
-  @keyframes respirar {
-    to { border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6.5vw, 4rem);
+    margin: 26px 0 10px;
+  }
+  .cargo {
+    color: var(--orange-ink);
+    font-weight: 600;
+    font-size: 1.15rem;
+    margin: 0 0 12px;
+  }
+  .cargo span { display: block; color: var(--muted); font-weight: 500; font-size: 1rem; }
+  .bio { color: var(--muted); max-width: 52ch; margin: 0 auto 26px; }
+  .acoes { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .secundario {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.75em 1.3em;
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    border: 1px solid var(--glass-border);
+    color: var(--ink);
+    font-weight: 650;
+    text-decoration: none;
+    backdrop-filter: blur(12px);
+  }
+  .secundario:hover { background: var(--surface-2); color: var(--ink); }
+
+  .painel {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 18px;
+  }
+  .cartao { padding: 28px; }
+  .cartao h2 {
+    font-size: 0.85rem;
+    font-weight: 650;
+    letter-spacing: 0;
+    color: var(--lilac);
+    margin: 0 0 12px;
+  }
+  .cartao h2.espaco { margin-top: 24px; }
+  .destaque {
+    font-size: 1.4rem;
+    line-height: 1.3;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    margin: 0 0 12px;
+  }
+  .meta { color: var(--muted); font-size: 0.92rem; margin: 0; }
+  .chips { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chips li {
+    background: var(--surface-2);
+    border-radius: var(--r-pill);
+    padding: 5px 14px;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .barra {
+    height: 10px;
+    border-radius: var(--r-pill);
+    background: var(--line);
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .barra i {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--lilac), var(--orange));
   }
 
-  .explorar h2 { margin-bottom: 24px; }
-  .secoes { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-  .secoes a {
+  .secoes {
     display: grid;
-    grid-template-columns: 200px 1fr auto;
-    align-items: center;
-    gap: 20px;
-    padding: 22px 28px;
-    border-radius: var(--r-lg);
-    background: var(--surface);
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+  }
+  .secoes a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 20px 22px;
+    border-radius: var(--r-md);
     color: var(--ink);
     text-decoration: none;
-    transition: background 0.25s, border-radius 0.35s;
+    transition: background 0.2s, transform 0.2s;
   }
-  .secoes a:hover {
-    background: var(--surface-2);
-    border-radius: 48px 22px 48px 22px;
-  }
-  .secao-nome {
-    font-family: var(--font-display);
-    font-variation-settings: 'SOFT' 100;
-    font-size: 1.55rem;
-    font-weight: 560;
-  }
-  .secao-texto { color: var(--muted); }
-  .secao-info {
-    font-weight: 700;
-    font-size: 0.9rem;
-    color: var(--orange-ink);
-    background: var(--bg);
-    padding: 0.35em 0.9em;
-    border-radius: var(--r-pill);
-    white-space: nowrap;
-  }
+  .secoes a:hover { background: var(--surface-2); transform: translateY(-2px); }
+  .secao-nome { font-weight: 700; letter-spacing: -0.01em; }
+  .secao-texto { color: var(--muted); font-size: 0.85rem; line-height: 1.45; }
 
-  @media (max-width: 760px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-arte { order: -1; max-width: 170px; justify-self: start; }
-    .iniciais { font-size: 4rem; }
-    .secoes a { grid-template-columns: 1fr auto; gap: 4px 12px; padding: 18px 22px; }
-    .secao-texto { grid-column: 1 / -1; grid-row: 2; }
+  @media (max-width: 900px) {
+    .painel { grid-template-columns: 1fr; }
+    .secoes { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .secoes { grid-template-columns: 1fr; }
   }
 </style>
