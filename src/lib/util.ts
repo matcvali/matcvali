@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import yaml from 'js-yaml';
 import { marked } from 'marked';
+import katex from 'katex';
 import { langs, type Lang } from '../i18n/ui';
 
 /** Monta um link respeitando o endereço base do site. */
@@ -57,9 +58,42 @@ export function normalizar(texto: string): string {
   return (texto || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
-/** Converte o texto das traduções (Markdown ou HTML do painel) em HTML. */
+/**
+ * O editor do painel "protege" caracteres especiais ao salvar: \frac vira \\frac, x_1 vira x\_1.
+ * Dentro das fórmulas, desfazemos isso para o LaTeX chegar intacto ao KaTeX.
+ */
+function desproteger(tex: string): string {
+  return tex.replace(/\\([!-\/:-@\[-`{-~])/g, '$1');
+}
+
+/** Troca as fórmulas ($...$ e $$...$$) por marcadores e devolve o HTML de cada uma. */
+function separarFormulas(texto: string): { texto: string; formulas: string[] } {
+  const formulas: string[] = [];
+  const guardar = (tex: string, bloco: boolean) => {
+    let html: string;
+    try {
+      html = katex.renderToString(desproteger(tex).trim(), { displayMode: bloco, throwOnError: false, output: 'html' });
+    } catch {
+      html = `<code>${tex.replace(/</g, "&lt;")}</code>`;
+    }
+    formulas.push(bloco ? `<div class="formula">${html}</div>` : html);
+    return `KATEXMARCADOR${formulas.length - 1}FIM`;
+  };
+  // Em bloco: $$ ... $$ (pode ocupar várias linhas)
+  texto = texto.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => guardar(tex, true));
+  // Na linha: $ ... $ sem espaço logo depois da abertura nem antes do fechamento,
+  // e sem número logo após o fechamento (assim "R$ 5 e R$ 10" não vira fórmula).
+  texto = texto.replace(/(^|[^\\$])\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\d)/g, (_, antes, tex) => antes + guardar(tex, false));
+  return { texto, formulas };
+}
+
+/** Converte o texto do painel (Markdown, com imagens e fórmulas em LaTeX) em HTML. */
 export function markdown(texto: string): string {
-  const html = marked.parse(texto || '', { async: false }) as string;
+  const { texto: semFormulas, formulas } = separarFormulas(texto || '');
+  let html = marked.parse(semFormulas, { async: false }) as string;
+  html = html.replace(/KATEXMARCADOR(\d+)FIM/g, (_, i) => formulas[Number(i)]);
+  // Um parágrafo que só contém uma fórmula em bloco não precisa do <p> em volta.
+  html = html.replace(/<p>\s*(<div class="formula">[\s\S]*?<\/div>)\s*<\/p>/g, '$1');
   // Imagens e links enviados pelo painel começam com "/" (ex.: /imagens/foto.png).
   // Aqui eles ganham o endereço base do site, para funcionar em qualquer pasta.
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
