@@ -26,5 +26,12 @@ Isso sempre me incomodou, pois, com o conhecimento que tinha na época, isso sim
 
 ![divisao.png](/imagens/divisao.png)
 
-De fato, a partir das reticências, se dermos *zoom* em uma das caixinhas que possuem um quarto do volume da primeira, podemos fazer o processo com ela de novo, e de novo, e de novo... Isto é, como pode isso ter um fim? Matematicamente, eu também estava muito convencido de que   
+De fato, a partir das reticências, se dermos *zoom* em uma das caixinhas que possuem um quarto do volume da primeira, podemos fazer o processo com ela de novo, e de novo, e de novo... Isto é, como pode isso ter um fim? Matematicamente, eu também estava muito convencido de que estava certo:  
   
+$$ V_{\text{caixa N}} = \dfrac{V_{\text{primeira caixa}}}{2^{N}} $$  
+  
+A minha ideia era que, não importa o quão grande fosse $N$, o resultado dessa divisão nunca seria zero. Portanto, como pode não ser mais possível dividi-la? 
+
+Hoje em dia, tenho duas noções diferentes sobre esse assunto. A primeira é que essa divisão pode sim ser zero, basta tomar um valor infinitamente grande para $N$, isto é, $N\to\infty$. Entretanto, saber isso não muda de nada. Primeiramente, seria impossível dividir algo infinitamente, visto que levaria um tempo infinito e uma vida humana tem ordem de $10^6$ horas, o que é bem menor que o infinito. O segundo fato é que, o impossível não se dá pela divisão ser zero, mas sim por não existir essa divisão fisicamente. Em outras palavras, o limite era físico, e não matemático e, por saber tão pouco de física, não entrava na minha cabeça.
+
+Depois de estudar, tanto em física quanto em química que, essa limitação se dava, na verdade, por conta de partículas muito pequenas que são, de fato, indivisíveis. Daí, tem-se a limitação. Toda essa história acabou me fazendo interessar bastante por física e, felizmente, cheguei onde estou.
