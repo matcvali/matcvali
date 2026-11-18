@@ -1,16 +1,14 @@
 ---
-titulo: Meus interesses atuais
-titulo_en: My current interests
-titulo_es: Mis intereses actuales
-resumo: Texto provisório. Troque por uma frase que resuma a história.
-resumo_en: Placeholder text. Replace it with a sentence that sums up the story.
-resumo_es: Texto provisional. Cámbialo por una frase que resuma la historia.
-capa: ""
+titulo: Meus interesses atuais (de física)
+resumo: Tópicos pelos quais me interesso atualmente. Isso não quer dizer que
+  pretendo trabalhar com eles, apenas que são tópicos que me interessam.
 ordem: 2
 rascunho: false
-texto_en: |
-  Placeholder text. Write here what interests you today and why.
-texto_es: |
-  Texto provisional. Escribe aquí qué te interesa hoy y por qué.
+titulo_en: My current interests
+resumo_en: Placeholder text. Replace it with a sentence that sums up the story.
+texto_en: Placeholder text. Write here what interests you today and why.
+titulo_es: Mis intereses actuales
+resumo_es: Texto provisional. Cámbialo por una frase que resuma la historia.
+texto_es: Texto provisional. Escribe aquí qué te interesa hoy y por qué.
 ---
 Texto provisório. Escreva aqui o que te interessa hoje e por quê.
