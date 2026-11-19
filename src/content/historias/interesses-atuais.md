@@ -2,6 +2,7 @@
 titulo: Meus interesses atuais (de física)
 resumo: Tópicos pelos quais me interesso atualmente. Isso não quer dizer que
   pretendo trabalhar com eles, apenas que são tópicos que me interessam.
+capa: /imagens/e76b11c4-853e-47a7-850a-faba30daf326.png
 ordem: 2
 rascunho: false
 titulo_en: My current interests
